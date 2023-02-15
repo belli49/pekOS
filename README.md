@@ -108,7 +108,7 @@ To install the system headers into system root:
 ./headers.sh
 ```
 
-To build the ISO with the OS:
+To build an ISO with the OS:
 
 ```sh
 ./iso.sh
