@@ -6,5 +6,5 @@
 void kernel_main(void) {
 	terminal_initialize();
   paging_init();
-	printf("Hello, welcome to pekOS!\n");
+  printf("Hello, welcome to pekOS!\n");
 }
