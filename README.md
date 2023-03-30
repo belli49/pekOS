@@ -11,7 +11,7 @@ Other Linux distros should work with similar steps, but may require additional l
 The following packages are required:
 
 |libraries|
-----
+|---------|
 |build-essential|
 |bison|
 |flex|
