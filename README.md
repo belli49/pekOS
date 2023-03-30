@@ -4,6 +4,31 @@ This project contains a basic OS built upon the template of the "Meaty-Bones" Pr
 
 The cross-compiler used was built with gcc 12.2.0 and binutils-2.40.
 
+(Here I will only explain how to build the OS when using Ubuntu.
+Other Linux distros should work with similar steps, but may require additional libraries to be installed.)
+
+## Required packages
+The following packages are required:
+
+|libraries|
+----
+|build-essential|
+|bison|
+|flex|
+|libgmp3-dev|
+|libmpc-dev|
+|libmpfr-dev|
+|texinfo|
+|grub2|
+|grub2-commons|
+|xorriso|
+|mtools|
+
+You can install them by running the following command:
+```sh
+sudo apt install build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo grub2 grub2-commons xorriso mtools
+```
+
 ## Building the compiler
 First download and extract `gcc-12.2.0` and `binutils-2.40` to `$HOME/src/`.
 We will then build and bootstrap gcc to build the cross-compiler for the OS.
