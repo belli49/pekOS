@@ -20,14 +20,14 @@ The following packages are required:
 |libmpfr-dev|
 |texinfo|
 |grub2|
-|grub2-commons|
+|grub2-common|
 |xorriso|
 |mtools|
 |gcc-multilib|
 
 You can install them by running the following command:
 ```sh
-sudo apt install build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo grub2 grub2-commons xorriso mtools gcc-multilib
+sudo apt install build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo grub2 grub2-common xorriso mtools gcc-multilib
 ```
 
 ## Building the compiler
