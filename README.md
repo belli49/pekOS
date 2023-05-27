@@ -23,10 +23,11 @@ The following packages are required:
 |grub2-commons|
 |xorriso|
 |mtools|
+|gcc-multilib|
 
 You can install them by running the following command:
 ```sh
-sudo apt install build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo grub2 grub2-commons xorriso mtools
+sudo apt install build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo grub2 grub2-commons xorriso mtools gcc-multilib
 ```
 
 ## Building the compiler
@@ -48,7 +49,7 @@ make -j5
 make install
 ```
 
-Adding -j5 (in case of a 4 core processor) to make uses threads to speed up the process.
+Adding -j5 (in case of a 4 core processor) to make use of threads to speed up the process.
 
 ### GCC
 ```sh
