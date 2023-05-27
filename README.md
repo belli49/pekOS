@@ -74,7 +74,7 @@ export PATH="$HOME/opt/gcc-12.2.0/bin:$PATH"
 
 ## Building the cross-compiler
 We will then use the compiler created above to make a cross-compiler using the same GCC and binutils version.
-The following assumes that the compiler is located at `$HOME/opt/cross/`, else change the `PREFIX` env variable.
+The following assumes that the compiler will be located at `$HOME/opt/cross/`, else change the `PREFIX` env variable.
 
 Here, we are compiling to target i686-elf (common x86 architecture).
 
