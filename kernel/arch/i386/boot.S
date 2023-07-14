@@ -14,6 +14,8 @@
 
 # Allocate the initial stack.
 .section .bootstrap_stack, "aw", @nobits
+.global stack_bottom
+.global stack_top
 stack_bottom:
 .skip 16384 # 16 KiB
 stack_top:
@@ -26,7 +28,7 @@ stack_top:
 boot_page_directory:
 	.skip 4096
 boot_page_table1:
-	.skip 4096
+  .skip 4096
 # Further page tables may be required if the kernel grows beyond 3 MiB.
 
 # The kernel entry point.

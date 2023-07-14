@@ -25,4 +25,3 @@ _write_cr3:
   movl %eax, %cr3
   popl %ebp
   ret
-
