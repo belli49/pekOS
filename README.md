@@ -147,5 +147,4 @@ To quickly run the ISO with qemu:
 ./qemu.sh
 ```
 * To install qemu simply run `sudo apt install libvirt-daemon`
-
-To boot it in real hardware, we can just install the ISO (e.g. in a USB stick).
+* To boot it in real hardware, install the ISO (do at your own risk).
