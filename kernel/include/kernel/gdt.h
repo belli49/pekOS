@@ -3,13 +3,11 @@
 
 #include <kernel/serial.h>
 
-extern uint8_t stack_top[];
-extern void flush_tss();
-extern void flush_gdt();
 
 // ----- STRUCT DEF -----
 // gdt entry format
-struct __attribute__((__packed__)) gdt_entry_bits {
+#pragma pack(push, 1)
+struct gdt_entry_bits {
 	unsigned int limit_low              : 16;
 	unsigned int base_low               : 24;
 	unsigned int accessed               :  1;
@@ -25,12 +23,13 @@ struct __attribute__((__packed__)) gdt_entry_bits {
 	unsigned int big                    :  1; // 32-bit opcodes for code, uint32_t stack for data
 	unsigned int gran                   :  1; // 1 to use 4k page addressing, 0 for byte addressing
 	unsigned int base_high              :  8;
-}; 
-
+} __attribute__((__packed__)); 
+#pragma pack(pop)
 
 
 // tss entry format
-struct __attribute__((__packed__)) tss_entry_struct {
+#pragma pack(push, 1)
+struct tss_entry_struct {
 	uint32_t prev_tss; // The previous TSS - with hardware task switching these form a kind of backward linked list.
 	uint32_t esp0;     // The stack pointer to load when changing to kernel mode.
 	uint32_t ss0;      // The stack segment to load when changing to kernel mode.
@@ -59,13 +58,21 @@ struct __attribute__((__packed__)) tss_entry_struct {
 	uint32_t ldt;
 	uint16_t trap;
 	uint16_t iomap_base;
-};
+} __attribute__((__packed__)) ;
+#pragma pack(pop)
  
 // ----- STRUCT DEF END -----
 
 typedef struct tss_entry_struct tss_entry_t;
 typedef struct gdt_entry_bits gdt_entry;
 
-void write_tss(gdt_entry *g, gdt_entry *kernel_stack_segment);
+extern uint8_t stack_top[];
+extern void flush_tss();
+extern void flush_gdt(gdt_entry *gdt_ptr, size_t gdt_size);
+extern void reload_segments();
+
+
+uintptr_t get_stack_pointer();
+void write_tss(gdt_entry *g);
 void set_kernel_stack(uint32_t stack);
 void init_gdt();

@@ -14,8 +14,6 @@
 
 # Allocate the initial stack.
 .section .bootstrap_stack, "aw", @nobits
-.global stack_bottom
-.global stack_top
 stack_bottom:
 .skip 16384 # 16 KiB
 stack_top:

@@ -4,15 +4,20 @@
 #include <kernel/serial.h>
 #include <kernel/gdt.h>
 
+uintptr_t get_stack_pointer() {
+  uintptr_t sp;
+  asm volatile("mov %%esp, %0" : "=r" (sp));
+  return sp;
+}
+
 tss_entry_t tss_entry;
 gdt_entry gdt[6]; // one null segment, two ring 0 segments, two ring 3 segments, TSS segment
-size_t gdt_size = sizeof(gdt);
 
 // Set and add TSS entry to GDT
-void write_tss(gdt_entry *g, gdt_entry *kernel_stack_segment) {
+void write_tss(gdt_entry *g) {
 	// Compute the base and limit of the TSS for use in the GDT entry.
 	uint32_t base = (uint32_t) &tss_entry;
-	uint32_t limit = sizeof tss_entry;
+	uint32_t limit = sizeof(tss_entry);
 
 	// Add a TSS descriptor to the GDT.
 	g->limit_low = limit;
@@ -21,7 +26,7 @@ void write_tss(gdt_entry *g, gdt_entry *kernel_stack_segment) {
 	g->read_write = 0; // For a TSS, indicates busy (1) or not busy (0).
 	g->conforming_expand_down = 0; // always 0 for TSS
 	g->code = 1; // For a TSS, 1 indicates 32-bit (1) or 16-bit (0).
-	g->code_data_segment=0; // indicates TSS/LDT (see also `accessed`)
+	g->code_data_segment = 0; // indicates TSS/LDT (see also `accessed`)
 	g->DPL = 0; // ring 0, see the comments below
 	g->present = 1;
 	g->limit_high = (limit & (0xf << 16)) >> 16; // isolate top nibble
@@ -34,8 +39,9 @@ void write_tss(gdt_entry *g, gdt_entry *kernel_stack_segment) {
 	// Ensure the TSS is initially zero'd.
 	memset(&tss_entry, 0, sizeof tss_entry);
 
-	tss_entry.ss0  = (uint32_t) (kernel_stack_segment);  // Set the kernel stack segment (kernel data)
-	tss_entry.esp0 = (uint32_t) (&stack_top); // Set the kernel stack pointer.
+  // Set the kernel stack segment (kernel data)
+	tss_entry.ss0  = (uint32_t) ((2 * sizeof(gdt_entry)) | (0 << 1) | 0x0); // (index << 3) | (TI << 2) | (RPL)
+	tss_entry.esp0 = (uint32_t) (get_stack_pointer()); // Set the kernel stack pointer.
 	//note that CS is loaded from the IDT entry and should be the regular kernel code segment
 }
 
@@ -45,12 +51,17 @@ void set_kernel_stack(uint32_t stack) { // Used when an interrupt occurs
 
 void init_gdt() {
 
-  // ring 0 segments
+  // ring 0 and ring 3 segments
   gdt_entry *ring0_code = &gdt[1];
   gdt_entry *ring0_data = &gdt[2];
+  gdt_entry *ring3_code = &gdt[3];
+  gdt_entry *ring3_data = &gdt[4];
 
+
+  // set ring0_code data
   ring0_code->limit_low = 0xFFFF;
   ring0_code->base_low = 0;
+
   // set access byte to 0x9A
   ring0_code->accessed = 0;
   ring0_code->read_write = 1; // since this is a code segment, specifies that the segment is readable
@@ -59,35 +70,33 @@ void init_gdt() {
   ring0_code->code_data_segment = 1;
   ring0_code->DPL = 0; // ring 0 (privilege level)
   ring0_code->present = 1;
+
   ring0_code->limit_high = 0xF;
-  ring0_code->available = 1;
+  ring0_code->available = 0; // should it be 1?
   ring0_code->long_mode = 0;
   ring0_code->big = 1; // it's 32 bits
   ring0_code->gran = 1; // 4KB page addressing
   ring0_code->base_high = 0;
 
+
   // set ring0_data with code set to 0
-  *ring0_data = *ring0_code;
+  *ring0_data = *ring0_code; // contents are similar so save time by copying
   ring0_data->code = 0;
-
-
-  // ring 3 segments
-  gdt_entry *ring3_code = &gdt[3];
-  gdt_entry *ring3_data = &gdt[4];
 
   // ring3_code is the same as ring0_code with DPL = 0x11 (privilege level)
   *ring3_code = *ring0_code;
   ring3_code->DPL = 3;
 
   // ring3_data is the same as ring3_code with code set to 0
-  *ring3_data = *ring3_code; // contents are similar so save time by copying
+  *ring3_data = *ring3_code;
   ring3_data->code = 0; // not code but data
 
 
-  flush_gdt();
-  write_string_serial("Flushed GDT\n");
+  flush_gdt(gdt, sizeof(gdt));
+  reload_segments();
+  write_string_serial("Reloaded segments\n");
 
-  write_tss(&gdt[5], &gdt[2]); // TSS segment will be the fifth (sixth counting null segment)
+  write_tss(&gdt[5]); // TSS segment will be the fifth (sixth counting null segment)
   flush_tss();
   write_string_serial("Flushed TSS\n");
 

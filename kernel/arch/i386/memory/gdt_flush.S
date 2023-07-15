@@ -1,28 +1,32 @@
-.global gdt
 .global flush_gdt
-.global gdt_size
+.global reload_segments
 
-gdt_end:
-  .long
-
-gdtr:
-  .short 0    // For limit storage
-  .long 0    // For base storage
+.gdt_descriptor:
+  .word 0 // gdt_size - 1
+  .long 0 // gdt_address
 
 flush_gdt:
-  // calculate gdt_end
-  movl $gdt_size, %eax
-  leal gdt(%eax), %edx
-  movl %edx, gdt_end
+  movl 4(%esp), %eax // gdt_address
+  movw 8(%esp), %bx // gdt_size
 
-  cli
-  xorl %eax, %eax
-  movw %ds, %ax
-  shl $4, %eax
-  addl $gdt, %eax
-  movl %eax, gdtr + 2
-  subl $gdt, gdt_end
-  movl $gdt_end, %eax
-  movw %ax, gdtr
-  lgdt gdtr
+  movl %eax, (.gdt_descriptor + 2)
+
+  subw $1, %bx
+  movw %bx, (.gdt_descriptor)
+
+  lgdt (.gdt_descriptor)
   ret
+
+reload_segments:
+   // Reload CS register containing code selector:
+   jmp $0x08, $.reload_CS   # 0x08 -> code segment
+
+.reload_CS:
+   // Reload data segment registers:
+   mov $0x10, %ax         # 0x10 -> data segment
+   mov %ax, %ds
+   mov %ax, %es
+   mov %ax, %fs
+   mov %ax, %gs
+   mov %ax, %ss
+   ret

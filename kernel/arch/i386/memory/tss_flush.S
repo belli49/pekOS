@@ -1,6 +1,6 @@
 .global flush_tss
 
 flush_tss:
-	mov $0x28, %ax
+	movl $0x28, %eax
 	ltr %ax
 	ret

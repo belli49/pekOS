@@ -7,9 +7,9 @@
 
 void kernel_main(void) {	
   terminal_initialize();
-  paging_init();
   init_serial();
   init_gdt();
+  paging_init();
 
   printf("Hello, welcome to pekOS!\n");
 }
