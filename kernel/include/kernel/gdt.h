@@ -7,7 +7,7 @@
 // ----- STRUCT DEF -----
 // gdt entry format
 #pragma pack(push, 1)
-struct gdt_entry_bits {
+struct gdt_entry_struct {
 	unsigned int limit_low              : 16;
 	unsigned int base_low               : 24;
 	unsigned int accessed               :  1;
@@ -64,7 +64,7 @@ struct tss_entry_struct {
 // ----- STRUCT DEF END -----
 
 typedef struct tss_entry_struct tss_entry_t;
-typedef struct gdt_entry_bits gdt_entry;
+typedef struct gdt_entry_struct gdt_entry;
 
 extern uint8_t stack_top[];
 extern void flush_tss();

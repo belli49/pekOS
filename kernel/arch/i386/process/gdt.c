@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
 
 #include <kernel/serial.h>
 #include <kernel/gdt.h>
@@ -40,7 +41,7 @@ void write_tss(gdt_entry *g) {
 	memset(&tss_entry, 0, sizeof tss_entry);
 
   // Set the kernel stack segment (kernel data)
-	tss_entry.ss0  = (uint32_t) ((2 * sizeof(gdt_entry)) | (0 << 1) | 0x0); // (index << 3) | (TI << 2) | (RPL)
+	tss_entry.ss0  = (uint32_t) ((2 << 3) | (0 << 1) | 0x0); // (index << 3) | (TI << 2) | (RPL)
 	tss_entry.esp0 = (uint32_t) (get_stack_pointer()); // Set the kernel stack pointer.
 	//note that CS is loaded from the IDT entry and should be the regular kernel code segment
 }
@@ -92,14 +93,18 @@ void init_gdt() {
   ring3_data->code = 0; // not code but data
 
 
+  // TODO: instead of making descriptor with assembly, use structure like with idt
   flush_gdt(gdt, sizeof(gdt));
   reload_segments();
   write_string_serial("Reloaded segments\n");
 
   write_tss(&gdt[5]); // TSS segment will be the fifth (sixth counting null segment)
+
   flush_tss();
   write_string_serial("Flushed TSS\n");
 
+  printf("gdt location: %x\n", &gdt);
+  printf("tss location: %x\n", &tss_entry);
 
   return;
 }
