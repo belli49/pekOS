@@ -14,5 +14,5 @@ struct idtr_struct {
   uint32_t base;
 } __attribute__((packed));
 
-typedef idt_entry_struct idt_entry_t; 
-typedef idtr_struct idtr_t; 
+typedef struct idt_entry_struct idt_entry_t; 
+typedef struct idtr_struct idtr_t; 
