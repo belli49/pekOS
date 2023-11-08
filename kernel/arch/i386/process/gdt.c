@@ -11,8 +11,8 @@ uintptr_t get_stack_pointer() {
   return sp;
 }
 
-tss_entry_t tss_entry;
-gdt_entry gdt[6]; // one null segment, two ring 0 segments, two ring 3 segments, TSS segment
+static tss_entry_t tss_entry;
+static gdt_entry gdt[6]; // one null segment, two ring 0 segments, two ring 3 segments, TSS segment
 
 // Set and add TSS entry to GDT
 void write_tss(gdt_entry *g) {
