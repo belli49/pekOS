@@ -27,6 +27,10 @@ boot_page_directory:
 	.skip 4096
 boot_page_table1:
   .skip 4096
+/* Add another page table for testing purposes
+boot_page_table2:
+  .skip 4096
+*/
 # Further page tables may be required if the kernel grows beyond 3 MiB.
 
 # The kernel entry point.
@@ -83,13 +87,19 @@ _start:
 	movl $(boot_page_table1 - 0xC0000000 + 0x003), boot_page_directory - 0xC0000000 + 0
 	movl $(boot_page_table1 - 0xC0000000 + 0x003), boot_page_directory - 0xC0000000 + 768 * 4
 
+  /* Test
+  # Map 0x80000000 to 0x80000000 for testing purposes
+	movl $(0x80000000 | 0x003), boot_page_table2 - 0xC0000000
+	movl $(boot_page_table2 - 0xC0000000 + (0x80000000 | 0x003)), boot_page_directory - 0xC0000000 + 1 * 4
+  */
+
 	# Set cr3 to the address of the boot_page_directory.
 	movl $(boot_page_directory - 0xC0000000), %ecx
 	movl %ecx, %cr3
 
 	# Enable paging and the write-protect bit.
 	movl %cr0, %ecx
-	orl $0x80010000, %ecx
+	orl $0x80010001, %ecx
 	movl %ecx, %cr0
 
 	# Jump to higher half with an absolute jump. 
