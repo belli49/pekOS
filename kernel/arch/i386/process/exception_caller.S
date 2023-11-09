@@ -1,4 +1,5 @@
 .extern exception_handler
+.extern page_fault_handler
 
 .macro isr_err_stub num
 isr_stub_\num:
@@ -26,7 +27,13 @@ isr_err_stub    10
 isr_err_stub    11
 isr_err_stub    12
 isr_err_stub    13
-isr_err_stub    14
+
+# page fault exception (14)
+isr_stub_14: 
+    call page_fault_handler
+    call exception_handler
+    iret
+
 isr_no_err_stub 15
 isr_no_err_stub 16
 isr_err_stub    17

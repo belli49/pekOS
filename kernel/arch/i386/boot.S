@@ -88,13 +88,13 @@ _start:
 
   # Map 0x80000000 to 0x80000000 for testing purposes
 	movl $(0x80000000 | 0x003), boot_page_table2 - 0xC0000000
-	movl $(boot_page_table2 - 0xC0000000 + 0x003), boot_page_directory - 0xC0000000 + 512 * 4
+  movl $(boot_page_table2 - 0xC0000000 + 0x003), boot_page_directory - 0xC0000000 + 512 * 4
 
 	# Set cr3 to the address of the boot_page_directory.
 	movl $(boot_page_directory - 0xC0000000), %ecx
 	movl %ecx, %cr3
 
-	# Enable paging and the write-protect bit.
+	# Enable paging and the write-protect bit (and the protected mode bit, in this order from left to right).
 	movl %cr0, %ecx
 	orl $0x80010001, %ecx
 	movl %ecx, %cr0
