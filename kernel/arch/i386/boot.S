@@ -49,11 +49,12 @@ _start:
   movl $1023, %ecx
 
 1:
-  /*
+/*
 # Only map the kernel.
   cmpl $_kernel_start, %esi
   jl 2f
-  */
+*/
+
   cmpl $(_kernel_end - 0xC0000000), %esi
   jge 3f
 

@@ -54,5 +54,5 @@ void enable_apic() {
     cpu_set_apic_base(cpu_get_apic_base());
  
     /* Set the Spurious Interrupt Vector Register bit 8 to start receiving interrupts */
-    write_reg(0xF0, ReadRegister(0xF0) | 0x100);
+    // write_reg(0xF0, ReadRegister(0xF0) | 0x100);
 }
