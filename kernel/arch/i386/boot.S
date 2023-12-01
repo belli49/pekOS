@@ -38,12 +38,10 @@ boot_page_table2:
 .type _start, @function
 _start:
 	# Physical address of boot_page_table1.
-	# TODO: I recall seeing some assembly that used a macro to do the
-	#       conversions to and from physical. Maybe this should be done in this
-	#       code as well?
 	movl $(boot_page_table1 - 0xC0000000), %edi
 	# First address to map is address 0.
-	# TODO: Start at the first kernel page instead. Alternatively map the first
+	# TODO: Mapping everything from address 0 until end of kernel.
+  #       Alternatively map the first
 	#       1 MiB as it can be generally useful, and there's no need to
 	#       specially map the VGA buffer.
 	movl $0, %esi
@@ -51,9 +49,11 @@ _start:
 	movl $1023, %ecx
 
 1:
+  /*
 	# Only map the kernel.
 	cmpl $_kernel_start, %esi
 	jl 2f
+  */
 	cmpl $(_kernel_end - 0xC0000000), %esi
 	jge 3f
 

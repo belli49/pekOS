@@ -21,7 +21,7 @@ void kernel_main(void) {
   // TESTS
   printf("TESTS\n");
 
-  // print_at_address((uintptr_t*) 0xC0000000);
+  print_at_address((uintptr_t*) 0xC0000000);
 
   // gdt null segment
   print_at_address((uintptr_t*) 0xC0108020);
