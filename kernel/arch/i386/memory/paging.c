@@ -5,9 +5,9 @@
 
 
 void paging_init() {
-    _read_cr0();
-    printf("ok\n");
+  _read_cr0();
+  printf("ok\n");
 
-    return;
+  return;
 }
 

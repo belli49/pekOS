@@ -14,26 +14,26 @@ static idt_entry_t idt[IDT_MAX_DESCRIPTORS];
 static idtr_t idtr;
 
 void idt_set_descriptor(uint8_t vector, void* isr, uint8_t flags) {
-    idt_entry_t* descriptor = &idt[vector];
- 
-    descriptor->isr_low         = (uint32_t)isr & 0xFFFF;
-    descriptor->kernel_cs       = GDT_OFFSET_KERNEL_CODE; 
-    descriptor->type_attributes = flags;
-    descriptor->isr_high        = (uint32_t)isr >> 16;
-    descriptor->reserved        = 0;
+  idt_entry_t* descriptor = &idt[vector];
+
+  descriptor->isr_low         = (uint32_t)isr & 0xFFFF;
+  descriptor->kernel_cs       = GDT_OFFSET_KERNEL_CODE; 
+  descriptor->type_attributes = flags;
+  descriptor->isr_high        = (uint32_t)isr >> 16;
+  descriptor->reserved        = 0;
 }
 
 void init_idt() {
-    idtr.base = (uintptr_t) &idt[0];
-    idtr.limit = (uint16_t) sizeof(idt_entry_t) * IDT_MAX_DESCRIPTORS - 1;
- 
-    for (uint8_t vector = 0; vector < 32; vector++) {
-        idt_set_descriptor(vector, isr_stub_table[vector], 0x8E);
-        // vectors[vector] = true; // why does this exist?
-    }
- 
-    __asm__ volatile ("lidt %0" : : "m"(idtr)); // load the new IDT
-    __asm__ volatile ("sti"); // set the interrupt flag
+  idtr.base = (uintptr_t) &idt[0];
+  idtr.limit = (uint16_t) sizeof(idt_entry_t) * IDT_MAX_DESCRIPTORS - 1;
 
-    write_string_serial("Flushed IDT\n");
+  for (uint8_t vector = 0; vector < 32; vector++) {
+    idt_set_descriptor(vector, isr_stub_table[vector], 0x8E);
+    // vectors[vector] = true; // why does this exist?
+  }
+
+  __asm__ volatile ("lidt %0" : : "m"(idtr)); // load the new IDT
+  __asm__ volatile ("sti"); // set the interrupt flag
+
+  write_string_serial("Flushed IDT\n");
 }
