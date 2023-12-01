@@ -3,14 +3,14 @@
 
 .macro isr_err_stub num
 isr_stub_\num:
-    call exception_handler
-    iret
+  call exception_handler
+  iret
 .endm
 
 .macro isr_no_err_stub num
 isr_stub_\num:
-    call exception_handler
-    iret
+  call exception_handler
+  iret
 .endm
 
 isr_no_err_stub 0
@@ -30,9 +30,9 @@ isr_err_stub    13
 
 # page fault exception (14)
 isr_stub_14: 
-    call page_fault_handler
-    call exception_handler
-    iret
+  call page_fault_handler
+  call exception_handler
+  iret
 
 isr_no_err_stub 15
 isr_no_err_stub 16
@@ -61,11 +61,11 @@ isr_no_err_stub 31
 .endm
 
 .macro loop_insert_stub
-    i = 0
-    .rept 32
-      create_isr_stub %i
-      i = i + 1
-    .endr
+  i = 0
+  .rept 32
+    create_isr_stub %i
+    i = i + 1
+  .endr
 .endm
 
 

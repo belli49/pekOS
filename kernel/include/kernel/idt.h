@@ -3,11 +3,11 @@
 extern void* isr_stub_table[];
 
 struct idt_entry_struct {
-   uint16_t isr_low;         // offset bits 0..15
-   uint16_t kernel_cs;       // a code segment selector in GDT or LDT
-   uint8_t  reserved;        // unused, set to 0
-   uint8_t  type_attributes; // gate type, dpl, and p fields
-   uint16_t isr_high;        // offset bits 16..31
+ uint16_t isr_low;         // offset bits 0..15
+ uint16_t kernel_cs;       // a code segment selector in GDT or LDT
+ uint8_t  reserved;        // unused, set to 0
+ uint8_t  type_attributes; // gate type, dpl, and p fields
+ uint16_t isr_high;        // offset bits 16..31
 } __attribute__((packed));
 
 // descriptor structure
