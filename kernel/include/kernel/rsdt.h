@@ -50,5 +50,6 @@ struct XSDP_t {
  uint8_t reserved[3];
 } __attribute__ ((packed));
 
+uintptr_t find_RSDT(void);
 bool doChecksum(ACPISDTHeader *tableHeader);
 void *findFACP(void *RootSDT);

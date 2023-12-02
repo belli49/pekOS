@@ -7,5 +7,5 @@ void exception_handler() {
 }
 
 void page_fault_handler() {
-  printf("Exception call to page fault worked!\n");
+  printf("Exception call to page fault\n");
 }
