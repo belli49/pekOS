@@ -24,7 +24,7 @@ uintptr_t find_RSDT() {
     if (!strncmp((char*) cur_location, "RSD PTR ", 8)) {
       printf("Found possible RSDP at %x\n", (uintptr_t) cur_location);
 
-      if (do_checksum_RSDP(cur_location)) {
+      if (!do_checksum_RSDP(cur_location)) {
         printf("Failed checksum; continuing search\n");
       } else {
         printf("Checksum successful: Found RSDP at %x\n", (uintptr_t) cur_location);
@@ -43,7 +43,7 @@ uintptr_t find_RSDT() {
     if (!strncmp((char*) cur_location, "RSD PTR ", 8)) {\
       printf("Found possible RSDP at %x\n", (uintptr_t) cur_location);
 
-      if (do_checksum_RSDP(cur_location)) {
+      if (!do_checksum_RSDP(cur_location)) {
         printf("Failed checksum; continuing search\n");
       } else {
         printf("Checksum successful: found RSDP at %x\n", (uintptr_t) cur_location);
@@ -69,10 +69,15 @@ bool do_checksum_ACPISDT(ACPISDTHeader *tableHeader) {
 
 bool do_checksum_RSDP(RSDP* rsdp) {
   unsigned char sum = 0;
+  bool version_2 = rsdp->Revision;
 
-  // size is char + byte + char + byte + 4byte -> 8bytes
-  for (uint32_t i = 0; i < 8; i++) {
-    sum += ((char *) rsdp)[i];
+  if (version_2) printf("RSDP using ACPI version 2\n");
+  else printf("RSDP using ACPI version 1\n");
+
+  // if version 1.0 size is 8 + 1 + 6 + 1 + 4 = 20 bytes
+  // if version 2.0 size is 20 + 4 + 8 + 1 + 3 = 36 bytes
+  for (uint32_t i = 0; i < (version_2 ? 36 : 20); i++) {
+    sum += ((char*) rsdp)[i];
   }
 
   return sum == 0;
