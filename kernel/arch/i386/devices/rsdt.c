@@ -22,8 +22,14 @@ uintptr_t find_RSDT() {
     void* cur_location = (void*) ((uint32_t) EBDA_location + d);
 
     if (!strncmp((char*) cur_location, "RSD PTR ", 8)) {
-      printf("Found RSDP at %x\n", cur_location);
-      return (uintptr_t) cur_location;
+      printf("Found possible RSDP at %x\n", (uintptr_t) cur_location);
+
+      if (do_checksum_RSDP(cur_location)) {
+        printf("Failed checksum; continuing search\n");
+      } else {
+        printf("Checksum successful: Found RSDP at %x\n", (uintptr_t) cur_location);
+        return (uintptr_t) cur_location;
+      }
     }
   }
 
@@ -31,12 +37,18 @@ uintptr_t find_RSDT() {
   // Look for RSDP from 0xE0000 to 0xFFFFF physical
   printf("Looking for RSDP after 0xE0000 starting at %x\n", 0xC00E0000);
     
-  for (uint32_t d = 0xC00E0000; d < 0xC00FFFFF; d += 0x10) {
-    void* cur_location = (void*) d;
+  for (uint32_t d = 0x000E0000; d < 0x000FFFFF; d += 0x10) {
+    void* cur_location = (void*) (KERNEL_MAP_START_LOCATION + d);
 
     if (!strncmp((char*) cur_location, "RSD PTR ", 8)) {\
-      printf("Found RSDP at %x\n", (uintptr_t) cur_location);
-      return (uintptr_t) cur_location;
+      printf("Found possible RSDP at %x\n", (uintptr_t) cur_location);
+
+      if (do_checksum_RSDP(cur_location)) {
+        printf("Failed checksum; continuing search\n");
+      } else {
+        printf("Checksum successful: found RSDP at %x\n", (uintptr_t) cur_location);
+        return (uintptr_t) cur_location;
+      }
     }
   }
 
@@ -45,11 +57,22 @@ uintptr_t find_RSDT() {
 }
 
 
-bool doChecksum(ACPISDTHeader *tableHeader) {
+bool do_checksum_ACPISDT(ACPISDTHeader *tableHeader) {
   unsigned char sum = 0;
 
   for (uint32_t i = 0; i < tableHeader->Length; i++) {
     sum += ((char *) tableHeader)[i];
+  }
+
+  return sum == 0;
+}
+
+bool do_checksum_RSDP(RSDP* rsdp) {
+  unsigned char sum = 0;
+
+  // size is char + byte + char + byte + 4byte -> 8bytes
+  for (uint32_t i = 0; i < 8; i++) {
+    sum += ((char *) rsdp)[i];
   }
 
   return sum == 0;
