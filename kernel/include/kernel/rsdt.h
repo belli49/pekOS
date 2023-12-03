@@ -52,7 +52,16 @@ struct XSDP_struct {
  uint8_t reserved[3];
 } __attribute__ ((packed));
 
-uintptr_t find_RSDT(void);
+
+void init_rsdt(void);
+void* find_RSDT(void);
+RSDP* find_RSDP(void);
 void *findFACP(void *RootSDT);
 bool do_checksum_ACPISDT(ACPISDTHeader *tableHeader);
 bool do_checksum_RSDP(RSDP* rsdp);
+
+
+extern bool ACPI_version;
+extern RSDP* rsdp;
+extern RSDT* rsdt;
+extern XSDT* xsdt;
