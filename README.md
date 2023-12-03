@@ -1,6 +1,6 @@
 # OS project
 
-This project contains a basic OS built upon the template of the "Meaty-Bones" Project on the OSdev Wiki (source: OSdev wiki: https://wiki.osdev.org/Creating_an_Operating_System).
+This project contains a basic OS built upon the template of the "Meaty-Skeleton" Project on the OSdev Wiki (source: OSdev wiki: https://wiki.osdev.org/Creating_an_Operating_System).
 
 The cross-compiler used was built with gcc 12.2.0 and binutils-2.40.
 
