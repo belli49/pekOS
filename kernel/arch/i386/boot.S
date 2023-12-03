@@ -28,13 +28,8 @@ boot_page_directory:
 # First kernel page table
 boot_page_table1:
   .skip 4096
-
 # Added new table for testing
 boot_page_table2:
-  .skip 4096
-
-# PT for self mapping PD
-boot_page_table_PD:
   .skip 4096
 # Further page tables may be required if the kernel grows beyond 3 MiB.
 
@@ -97,16 +92,16 @@ _start:
   movl $(0x80000000 + 0x003), boot_page_table2 - 0xC0000000
   movl $(boot_page_table2 - 0xC0000000 + 0x003), boot_page_directory - 0xC0000000 + 512 * 4
 
-# Self map page directory to the last PTE of PT pointed
-# to by last PDE (0xFFFFF000)
-#
-# 1111 1111 1111 1111 1111 0000 0000 0000
-# ---- ---- -- -> # 0x3FF (=1023) indexed PDE (last entry)
-#             -- ---- ---- -> 0x3FF (=1023) indexed PTE (last entry)
-# Map PD physical location to last PTE of boot_page_table_PD
-  movl $(boot_page_directory - 0xC0000000 + 0x003), boot_page_table_PD - 0xC0000000 + 1023 * 4
-# Map boot_page_table_PD physical location to last PDE of kernel PD
-  movl $(boot_page_table_PD - 0xC0000000 + 0x003), boot_page_directory - 0xC0000000 + 1023 * 4
+# Self map last PD to its last PDE so that the PD looks like a PT to the system;
+# this way, you can access PD at 0xFFFFF000.
+# Why? Because 0xFFFFF000 is the last PDE (idx 1023) of the PD. 
+# When trying to access it's value (virtually, PE), the system will check
+# the last PDE of the PD (because first 10 bits of address == 0x3FF),
+# which will point it to the supposed PT (here, the physical address of the PD).
+# Then, it will look to the last PTE (because next 10 bits of address == 0x3FF),
+# which will point it to the physical address (again, the physical address of the PD),
+# thus accessing the PD successfully.
+  movl $(boot_page_directory - 0xC0000000 + 0x003), boot_page_directory - 0xC0000000 + 1023 * 4
 
 # Set cr3 to the address of the boot_page_directory.
   movl $(boot_page_directory - 0xC0000000), %ecx
