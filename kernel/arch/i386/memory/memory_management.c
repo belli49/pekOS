@@ -30,21 +30,53 @@ void init_mm() {
   // We should access it through 0xFFFFF000 because it seems
   // less hacky and more in line with what others devs do (?)
 
+/*
+  printf("Physical address of PD; next 2 vals should be the same:\n");
+  printf("%x\n", (uintptr_t) get_physaddr(0xFFFFF000));
+  printf("%x\n", (uintptr_t) get_physaddr(0xC0000000 + (uintptr_t) _read_cr3()));
+*/
+
   return;
 }
 
-void* get_physaddr(void* virtualaddr) {
+void* get_physaddr(uintptr_t virtualaddr) {
     // first 10 bits of virtual address
-    uintptr_t pdindex = (uintptr_t) virtualaddr >> 22;
+    uintptr_t pdindex = virtualaddr >> 22;
     // next 10 bits of virtual address
-    uintptr_t ptindex = (uintptr_t) virtualaddr >> 12 & 0x03FF;
+    uintptr_t ptindex = virtualaddr >> 12 & 0x03FF;
     // last 12 bits of virtual address refer to byte location inside 4KiB chunk
 
     uintptr_t* pd = (uintptr_t*) 0xFFFFF000;
     // Here you need to check whether the PD entry is present.
 
-    uintptr_t* pt = ((uintptr_t*) 0xFFC00000) + (0x400 * pdindex);
+    // 0xFFC00000 will by at the last PDE (where we self-mapped the PD)
+    // thus, each page table's virtual address will be:
+    // 0xFFC00000 + idx (of page table in the PD) * 0x1000
+    // (here, we are jumping 1024 PTE per index instead which achieves
+    // the same result (using pointer instead of value))
+    uintptr_t* pt = ((uintptr_t*) 0xFFC00000) + (pdindex << 10);
     // Here you need to check whether the PT entry is present.
 
     return (void*) ((pt[ptindex] & ~0xFFF) + ((uintptr_t) virtualaddr & 0xFFF));
+}
+
+void map_page(uintptr_t* physaddr, uintptr_t* virtualaddr, uintptr_t flags) {
+    // Make sure that both addresses are page-aligned.
+
+    uintptr_t pdindex = (uintptr_t) virtualaddr >> 22;
+    uintptr_t ptindex = (uintptr_t)virtualaddr >> 12 & 0x03FF;
+
+    uintptr_t* pd = (uintptr_t*) 0xFFFFF000;
+    // Here you need to check whether the PD entry is present.
+    // When it is not present, you need to create a new empty PT and
+    // adjust the PDE accordingly.
+
+    uintptr_t* pt = ((uintptr_t*) 0xFFC00000) + (0x400 * pdindex);
+    // Here you need to check whether the PT entry is present.
+    // When it is, then there is already a mapping present. What do you do now?
+
+    pt[ptindex] = ((uintptr_t) physaddr | (flags & 0xFFF) | 0x01); // Present
+
+    // Now you need to flush the entry in the TLB
+    // or you might not notice the change.
 }
