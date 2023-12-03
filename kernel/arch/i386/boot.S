@@ -25,10 +25,16 @@ stack_top:
   .align 4096
 boot_page_directory:
   .skip 4096
+# First kernel page table
 boot_page_table1:
   .skip 4096
+
 # Added new table for testing
 boot_page_table2:
+  .skip 4096
+
+# PT for self mapping PD
+boot_page_table_PD:
   .skip 4096
 # Further page tables may be required if the kernel grows beyond 3 MiB.
 
@@ -74,7 +80,7 @@ _start:
 
 3:
 # Map VGA video memory to 0xC03FF000 as "present, writable".
-  movl $(0x000B8000 | 0x003), boot_page_table1 - 0xC0000000 + 1023 * 4
+  movl $(0x000B8000 + 0x003), boot_page_table1 - 0xC0000000 + 1023 * 4
 
 # The page table is used at both page directory entry 0 (virtually from 0x0
 # to 0x3FFFFF) (thus identity mapping the kernel) and page directory entry
@@ -88,8 +94,19 @@ _start:
   movl $(boot_page_table1 - 0xC0000000 + 0x003), boot_page_directory - 0xC0000000 + 768 * 4
 
 # Map 0x80000000 to 0x80000000 for testing purposes
-  movl $(0x80000000 | 0x003), boot_page_table2 - 0xC0000000
+  movl $(0x80000000 + 0x003), boot_page_table2 - 0xC0000000
   movl $(boot_page_table2 - 0xC0000000 + 0x003), boot_page_directory - 0xC0000000 + 512 * 4
+
+# Self map page directory to the last PTE of PT pointed
+# to by last PDE (0xFFFFF000)
+#
+# 1111 1111 1111 1111 1111 0000 0000 0000
+# ---- ---- -- -> # 0x3FF (=1023) indexed PDE (last entry)
+#             -- ---- ---- -> 0x3FF (=1023) indexed PTE (last entry)
+# Map PD physical location to last PTE of boot_page_table_PD
+  movl $(boot_page_directory - 0xC0000000 + 0x003), boot_page_table_PD - 0xC0000000 + 1023 * 4
+# Map boot_page_table_PD physical location to last PDE of kernel PD
+  movl $(boot_page_table_PD - 0xC0000000 + 0x003), boot_page_directory - 0xC0000000 + 1023 * 4
 
 # Set cr3 to the address of the boot_page_directory.
   movl $(boot_page_directory - 0xC0000000), %ecx
@@ -130,47 +147,3 @@ _start:
 1:
   hlt
   jmp 1b
-
-/*
-# Declare constants for the multiboot header.
-.set ALIGN,    1<<0             # align loaded modules on page boundaries
-.set MEMINFO,  1<<1             # provide memory map
-.set FLAGS,    ALIGN | MEMINFO  # this is the Multiboot 'flag' field
-.set MAGIC,    0x1BADB002       # 'magic number' lets bootloader find the header
-.set CHECKSUM, -(MAGIC + FLAGS) # checksum of above, to prove we are multiboot
-
-# Declare a header as in the Multiboot Standard.
-.section .multiboot
-.align 4
-.long MAGIC
-.long FLAGS
-.long CHECKSUM
-
-# Reserve a stack for the initial thread.
-.section .bss
-.align 16
-stack_bottom:
-.skip 16384 # 16 KiB
-stack_top:
-
-# The kernel entry point.
-.section .text
-.global _start
-.type _start, @function
-_start:
-  movl $stack_top, %esp
-
-# Call the global constructors.
-  call _init
-
-# Transfer control to the main kernel.
-  call kernel_main
-
-# Hang if kernel_main unexpectedly returns.
-  cli
-
-1:
-  hlt
-  jmp 1b
-.size _start, . - _start
-*/
