@@ -31,6 +31,10 @@ void init_rsdt() {
     // seems reasonable (apparently a there's a lot of MMIO
     // mapped close to 0xC0000000 physical)
     // else we'd have to keep relying on assembly
+    //
+    // We can't continue before doing that because
+    // the RSDT seems to be outside the currently mapped range
+
     printf("%x\n", (uintptr_t) rsdt);
     // printf("%s\n", rsdt->h.Signature);
   }

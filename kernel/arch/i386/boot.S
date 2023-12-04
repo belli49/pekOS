@@ -131,6 +131,12 @@ _start:
 # Set up the stack.
   mov $stack_top, %esp
 
+# Push eax and ebx onto the stack to get 
+# Note that we purposefully did not use these registers in the
+# code above and we doing it before _init as to not clobber them
+  pushl %eax
+  pushl %ebx
+
 # Call global constructors
   call _init
 

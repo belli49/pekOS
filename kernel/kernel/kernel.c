@@ -7,10 +7,11 @@
 #include <kernel/gdt.h>
 #include <kernel/idt.h>
 #include <kernel/memory_access.h>
+#include <kernel/multiboot.h>
 
 #include <kernel/rsdt.h>
 
-void kernel_main(void) {	
+void kernel_main(multiboot_info_t* mbd, uint32_t magic) {	
   terminal_initialize();
   init_serial();
   init_gdt();
@@ -19,7 +20,6 @@ void kernel_main(void) {
   init_rsdt();
 
   printf("Hello, welcome to pekOS!\n");
-
 
 /*
   // TESTS

@@ -64,7 +64,7 @@ void map_page(uintptr_t* physaddr, uintptr_t* virtualaddr, uintptr_t flags) {
     // Make sure that both addresses are page-aligned.
 
     uintptr_t pdindex = (uintptr_t) virtualaddr >> 22;
-    uintptr_t ptindex = (uintptr_t)virtualaddr >> 12 & 0x03FF;
+    uintptr_t ptindex = (uintptr_t) virtualaddr >> 12 & 0x03FF;
 
     uintptr_t* pd = (uintptr_t*) 0xFFFFF000;
     // Here you need to check whether the PD entry is present.
