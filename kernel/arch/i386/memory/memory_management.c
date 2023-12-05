@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 
 #include <kernel/tty.h>
 #include <kernel/memory_management.h>
@@ -8,6 +9,12 @@
 #define KERNEL_PD_VIRTUAL_LOCATION 0xFFFFF000
 
 uintptr_t* kernel_PD = (uintptr_t*) KERNEL_PD_VIRTUAL_LOCATION;
+// each bit is a page -> each byte is 1e8 pages
+// each page table is last 10 bits
+// each page dir entry is first 10 bits
+// -> we need 1e20 bits for the entire memory space
+// 1e20 / 1e5 = 1e15 32-bit int entries
+uintptr_t virtual_mm[(uint32_t) (1 << 15)]; 
 
 void init_mm() {
 /*
@@ -35,6 +42,9 @@ void init_mm() {
   printf("%x\n", (uintptr_t) get_physaddr(0xFFFFF000));
   printf("%x\n", (uintptr_t) get_physaddr(0xC0000000 + (uintptr_t) _read_cr3()));
 */
+
+  // Start by finding which pages are free/used and store the
+  // info into a custom structure.
 
   return;
 }
