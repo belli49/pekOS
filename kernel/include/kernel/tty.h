@@ -20,5 +20,6 @@ void terminal_handle_position(void);
 void terminal_scroll_down_by_amount(int d);
 void terminal_new_row(void);
 void terminal_scroll_down(int d);
+void terminal_clear_rest_of_line();
 
 #endif

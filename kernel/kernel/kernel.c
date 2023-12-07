@@ -21,6 +21,8 @@ void kernel_main(multiboot_info_t* mbd, uint32_t magic) {
 
   printf("Hello, welcome to pekOS!\n");
 
+  printf("%x\n", *((uintptr_t*) 0x80000000));
+
 /*
   // TESTS
   printf("TESTS\n");

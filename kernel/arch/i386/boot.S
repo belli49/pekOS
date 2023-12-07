@@ -88,9 +88,11 @@ _start:
   movl $(boot_page_table1 - 0xC0000000 + 0x003), boot_page_directory - 0xC0000000 + 0
   movl $(boot_page_table1 - 0xC0000000 + 0x003), boot_page_directory - 0xC0000000 + 768 * 4
 
+/*
 # Map 0x80000000 to 0x80000000 for testing purposes
   movl $(0x80000000 + 0x003), boot_page_table2 - 0xC0000000
   movl $(boot_page_table2 - 0xC0000000 + 0x003), boot_page_directory - 0xC0000000 + 512 * 4
+*/
 
 # Self map last PD to its last PDE so that the PD looks like a PT to the system;
 # this way, you can access PD at 0xFFFFF000.
