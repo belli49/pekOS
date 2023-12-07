@@ -84,10 +84,9 @@ void terminal_putentryat(unsigned char c, uint8_t color, size_t x, size_t y) {
 
 void terminal_putchar(char c) {
   unsigned char uc = c;
+
   if (uc == '\n') {
-    terminal_row++;
-    terminal_column = 0;
-    terminal_handle_position();
+    terminal_clear_rest_of_line();
     return;
   }
 
@@ -145,5 +144,11 @@ void terminal_new_row(void) {
   if (++terminal_row == VGA_HEIGHT - 1) {
     terminal_scroll_down(1);
     --terminal_row;
+  }
+}
+
+void terminal_clear_rest_of_line() {
+  while (terminal_column != 0) {
+    terminal_putchar(' ');
   }
 }

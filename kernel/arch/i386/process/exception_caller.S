@@ -29,9 +29,18 @@ isr_err_stub    12
 isr_err_stub    13
 
 # page fault exception (14)
-isr_stub_14: 
+isr_stub_14:
+  pushal
+
+  movl %cr2, %eax
+  pushl 32(%esp)
+  pushl %eax
+  cld
   call page_fault_handler
-  call exception_handler
+  addl $8, %esp
+  
+  popal
+  addl $4, %esp
   iret
 
 isr_no_err_stub 15
