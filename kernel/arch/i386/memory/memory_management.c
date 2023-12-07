@@ -14,6 +14,10 @@ uintptr_t virtual_mmap[(uint32_t) (1024 * 32)];
 uintptr_t cur_virtaddr_idx = 768 * 32;
 uintptr_t cur_physaddr = 768 * 32;
 
+// TODO: put physaddr back to 0x10000000
+// and make a function to find (0x1000 aligned) 4KiB
+// region to put a PT in
+
 void init_mm() {
 /*
   // PD is self mapped to last PTE of PT at last PDE
