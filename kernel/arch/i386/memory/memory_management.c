@@ -12,7 +12,7 @@ uintptr_t* kernel_PD = (uintptr_t*) KERNEL_PD_VIRTUAL_LOCATION;
 // number of pd entries * number of pt entries / sizeof(uint32_t)
 uintptr_t virtual_mmap[(uint32_t) (1024 * 32)]; 
 uintptr_t cur_virtaddr_idx = 768 * 32;
-uintptr_t cur_physaddr = 0x10000000;
+uintptr_t cur_physaddr = 768 * 32;
 
 void init_mm() {
 /*
@@ -127,7 +127,9 @@ void map_page(uintptr_t* physaddr, uintptr_t* virtualaddr, uintptr_t flags) {
 
     uintptr_t* pd = (uintptr_t*) 0xFFFFF000;
     if (!(pd[pdindex] & 1)) {
-      printf("PD entry not present - creating new PT at phys: %x\n", cur_physaddr);
+      printf("PD entry not present - creating new PT at virt: %x\n", cur_physaddr);
+      // has to be above 0xC0000000 because it's kernel
+      // PT address will be virtual - pt's addresses will be physical
       pd[pdindex] = (cur_physaddr | 3);
       cur_physaddr += 0x1000;
     }
@@ -140,7 +142,7 @@ void map_page(uintptr_t* physaddr, uintptr_t* virtualaddr, uintptr_t flags) {
       return;
     }
 
-    pt[ptindex] = ((uintptr_t) physaddr | (flags & 0xFFF) | 0x01); // Present
+    pt[ptindex] = ((uintptr_t) physaddr | (flags & 0xFFF) | 1); // Present
 
     // Now you need to flush the entry in the TLB
     // or you might not notice the change.

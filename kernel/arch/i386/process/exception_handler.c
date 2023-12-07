@@ -40,7 +40,6 @@ void page_fault_handler(uintptr_t* virtual_address, uint32_t error_code) {
   uintptr_t* physaddr = find_free_physaddr();
   printf("at: %x\n", (uintptr_t) physaddr);
 
-  // map page
   map_page(physaddr, virtual_address, 3);
 
   _write_cr3(_read_cr3());
