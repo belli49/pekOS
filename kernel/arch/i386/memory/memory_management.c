@@ -14,7 +14,7 @@ uintptr_t* kernel_PD = (uintptr_t*) KERNEL_PD_VIRTUAL_LOCATION;
 // each page dir entry is first 10 bits
 // -> we need 1e20 bits for the entire memory space
 // 1e20 / 1e5 = 1e15 32-bit int entries
-uintptr_t virtual_mm[(uint32_t) (1 << 15)]; 
+uintptr_t virtual_mm[(uint32_t) (1024 * 32)]; 
 
 void init_mm() {
 /*
@@ -45,6 +45,7 @@ void init_mm() {
 
   // Start by finding which pages are free/used and store the
   // info into a custom structure.
+
 
   return;
 }
