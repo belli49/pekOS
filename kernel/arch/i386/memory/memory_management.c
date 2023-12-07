@@ -11,7 +11,8 @@
 uintptr_t* kernel_PD = (uintptr_t*) KERNEL_PD_VIRTUAL_LOCATION;
 // number of pd entries * number of pt entries / sizeof(uint32_t)
 uintptr_t virtual_mmap[(uint32_t) (1024 * 32)]; 
-uintptr_t cur_physaddr_idx = 768 * 32;
+uintptr_t cur_virtaddr_idx = 768 * 32;
+uintptr_t cur_physaddr = 0x10000000;
 
 void init_mm() {
 /*
@@ -125,13 +126,19 @@ void map_page(uintptr_t* physaddr, uintptr_t* virtualaddr, uintptr_t flags) {
     uintptr_t ptindex = (uintptr_t) virtualaddr >> 12 & 0x03FF;
 
     uintptr_t* pd = (uintptr_t*) 0xFFFFF000;
-    // Here you need to check whether the PD entry is present.
-    // When it is not present, you need to create a new empty PT and
-    // adjust the PDE accordingly.
+    if (!(pd[pdindex] & 1)) {
+      printf("PD entry not present - creating new PT at phys: %x\n", cur_physaddr);
+      pd[pdindex] = (cur_physaddr | 3);
+      cur_physaddr += 0x1000;
+    }
 
     uintptr_t* pt = (uintptr_t*) (0xFFC00000 + (pdindex << 12));
     // Here you need to check whether the PT entry is present.
     // When it is, then there is already a mapping present. What do you do now?
+    if (pt[ptindex] & 1) {
+      printf("PTE already present at %x; aborting", ((uintptr_t) virtualaddr & (~0xFFF)));
+      return;
+    }
 
     pt[ptindex] = ((uintptr_t) physaddr | (flags & 0xFFF) | 0x01); // Present
 
@@ -139,14 +146,15 @@ void map_page(uintptr_t* physaddr, uintptr_t* virtualaddr, uintptr_t flags) {
     // or you might not notice the change.
 }
 
-uintptr_t* find_free_physaddr() {
-  uintptr_t ptr = cur_physaddr_idx;
+uintptr_t* find_free_virtaddr() {
+  // gets 4KiB's
+  uintptr_t ptr = cur_virtaddr_idx;
 
   for(; ptr < 1028 * 32; ptr++) {
     for (uint32_t i = 0; i < 32; i++) {
       if (((virtual_mmap[ptr] >> (31 - i)) & 1) != 1) {
         virtual_mmap[ptr] |= (1 << (31 - i));
-        cur_physaddr_idx = ptr;
+        cur_virtaddr_idx = ptr;
 
         return (uintptr_t*) ((ptr * 32 + i) << 12);
       }
@@ -154,4 +162,10 @@ uintptr_t* find_free_physaddr() {
   }
 
   return NULL;
+}
+
+uintptr_t* find_free_physaddr() {
+  uintptr_t* temp = (uintptr_t*) cur_physaddr;
+  cur_physaddr += 0x1000;
+  return temp;
 }

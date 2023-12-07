@@ -30,12 +30,17 @@ isr_err_stub    13
 
 # page fault exception (14)
 isr_stub_14:
-// pop error code to pass to handler
-// as argument
-  pusha 
+  pushal
+
+  movl %cr2, %eax
+  pushl 32(%esp)
+  pushl %eax
   cld
   call page_fault_handler
-  popa
+  addl $8, %esp
+  
+  popal
+  addl $4, %esp
   iret
 
 isr_no_err_stub 15
