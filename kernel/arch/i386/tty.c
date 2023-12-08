@@ -148,6 +148,7 @@ void terminal_new_row(void) {
 }
 
 void terminal_clear_rest_of_line() {
+  terminal_putchar(' ');
   while (terminal_column != 0) {
     terminal_putchar(' ');
   }

@@ -13,7 +13,7 @@ void page_fault_handler(uintptr_t* virtual_address, uint32_t error_code) {
   // fix caller
   // uintptr_t* virtual_address = (uintptr_t*) _read_cr2();
 
-  printf("Exception call to page fault with error code %x\n", error_code);
+  printf("\nException call to page fault with error code %x\n", error_code);
   printf("Virtual address called: %x\n", (uintptr_t) virtual_address);
 
   if (error_code & 1) {
@@ -43,5 +43,5 @@ void page_fault_handler(uintptr_t* virtual_address, uint32_t error_code) {
   map_page(physaddr, virtual_address, 3);
 
   _write_cr3(_read_cr3());
-  printf("Page successfully mapped - resuming execution\n");
+  printf("Page successfully mapped - resuming execution\n\n");
 }
