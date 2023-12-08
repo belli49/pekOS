@@ -1,5 +1,5 @@
 *.iso
 isodir
 sysroot
-.cache
+.cache/*
 compile_commands.json
