@@ -2,7 +2,7 @@
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -18,14 +18,14 @@
       "stdio/printf.libk.o",
       "stdio/printf.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/libc",
-    "file": "/home/komessu/projects/pekOS/libc/stdio/printf.c",
-    "output": "/home/komessu/projects/pekOS/libc/stdio/printf.libk.o"
+    "directory": "/home/komessu/Projects/pekOS/libc",
+    "file": "/home/komessu/Projects/pekOS/libc/stdio/printf.c",
+    "output": "/home/komessu/Projects/pekOS/libc/stdio/printf.libk.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -41,14 +41,14 @@
       "stdio/putchar.libk.o",
       "stdio/putchar.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/libc",
-    "file": "/home/komessu/projects/pekOS/libc/stdio/putchar.c",
-    "output": "/home/komessu/projects/pekOS/libc/stdio/putchar.libk.o"
+    "directory": "/home/komessu/Projects/pekOS/libc",
+    "file": "/home/komessu/Projects/pekOS/libc/stdio/putchar.c",
+    "output": "/home/komessu/Projects/pekOS/libc/stdio/putchar.libk.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -64,14 +64,14 @@
       "stdio/puts.libk.o",
       "stdio/puts.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/libc",
-    "file": "/home/komessu/projects/pekOS/libc/stdio/puts.c",
-    "output": "/home/komessu/projects/pekOS/libc/stdio/puts.libk.o"
+    "directory": "/home/komessu/Projects/pekOS/libc",
+    "file": "/home/komessu/Projects/pekOS/libc/stdio/puts.c",
+    "output": "/home/komessu/Projects/pekOS/libc/stdio/puts.libk.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -87,14 +87,14 @@
       "stdlib/abort.libk.o",
       "stdlib/abort.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/libc",
-    "file": "/home/komessu/projects/pekOS/libc/stdlib/abort.c",
-    "output": "/home/komessu/projects/pekOS/libc/stdlib/abort.libk.o"
+    "directory": "/home/komessu/Projects/pekOS/libc",
+    "file": "/home/komessu/Projects/pekOS/libc/stdlib/abort.c",
+    "output": "/home/komessu/Projects/pekOS/libc/stdlib/abort.libk.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -110,14 +110,14 @@
       "string/memcmp.libk.o",
       "string/memcmp.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/libc",
-    "file": "/home/komessu/projects/pekOS/libc/string/memcmp.c",
-    "output": "/home/komessu/projects/pekOS/libc/string/memcmp.libk.o"
+    "directory": "/home/komessu/Projects/pekOS/libc",
+    "file": "/home/komessu/Projects/pekOS/libc/string/memcmp.c",
+    "output": "/home/komessu/Projects/pekOS/libc/string/memcmp.libk.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -133,14 +133,14 @@
       "string/memcpy.libk.o",
       "string/memcpy.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/libc",
-    "file": "/home/komessu/projects/pekOS/libc/string/memcpy.c",
-    "output": "/home/komessu/projects/pekOS/libc/string/memcpy.libk.o"
+    "directory": "/home/komessu/Projects/pekOS/libc",
+    "file": "/home/komessu/Projects/pekOS/libc/string/memcpy.c",
+    "output": "/home/komessu/Projects/pekOS/libc/string/memcpy.libk.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -156,14 +156,14 @@
       "string/memmove.libk.o",
       "string/memmove.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/libc",
-    "file": "/home/komessu/projects/pekOS/libc/string/memmove.c",
-    "output": "/home/komessu/projects/pekOS/libc/string/memmove.libk.o"
+    "directory": "/home/komessu/Projects/pekOS/libc",
+    "file": "/home/komessu/Projects/pekOS/libc/string/memmove.c",
+    "output": "/home/komessu/Projects/pekOS/libc/string/memmove.libk.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -179,14 +179,14 @@
       "string/memset.libk.o",
       "string/memset.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/libc",
-    "file": "/home/komessu/projects/pekOS/libc/string/memset.c",
-    "output": "/home/komessu/projects/pekOS/libc/string/memset.libk.o"
+    "directory": "/home/komessu/Projects/pekOS/libc",
+    "file": "/home/komessu/Projects/pekOS/libc/string/memset.c",
+    "output": "/home/komessu/Projects/pekOS/libc/string/memset.libk.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -202,14 +202,14 @@
       "string/strlen.libk.o",
       "string/strlen.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/libc",
-    "file": "/home/komessu/projects/pekOS/libc/string/strlen.c",
-    "output": "/home/komessu/projects/pekOS/libc/string/strlen.libk.o"
+    "directory": "/home/komessu/Projects/pekOS/libc",
+    "file": "/home/komessu/Projects/pekOS/libc/string/strlen.c",
+    "output": "/home/komessu/Projects/pekOS/libc/string/strlen.libk.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -225,14 +225,14 @@
       "string/strncmp.libk.o",
       "string/strncmp.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/libc",
-    "file": "/home/komessu/projects/pekOS/libc/string/strncmp.c",
-    "output": "/home/komessu/projects/pekOS/libc/string/strncmp.libk.o"
+    "directory": "/home/komessu/Projects/pekOS/libc",
+    "file": "/home/komessu/Projects/pekOS/libc/string/strncmp.c",
+    "output": "/home/komessu/Projects/pekOS/libc/string/strncmp.libk.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-O2",
@@ -246,14 +246,14 @@
       "arch/i386/crti.o",
       "arch/i386/crti.S"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/crti.S",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/crti.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/crti.S",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/crti.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-O2",
@@ -267,14 +267,14 @@
       "arch/i386/boot.o",
       "arch/i386/boot.S"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/boot.S",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/boot.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/boot.S",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/boot.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -289,14 +289,14 @@
       "arch/i386/tty.o",
       "arch/i386/tty.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/tty.c",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/tty.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/tty.c",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/tty.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -311,14 +311,14 @@
       "arch/i386/devices/apic.o",
       "arch/i386/devices/apic.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/devices/apic.c",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/devices/apic.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/devices/apic.c",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/devices/apic.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -333,14 +333,14 @@
       "arch/i386/devices/pic.o",
       "arch/i386/devices/pic.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/devices/pic.c",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/devices/pic.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/devices/pic.c",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/devices/pic.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -355,14 +355,14 @@
       "arch/i386/devices/rsdt.o",
       "arch/i386/devices/rsdt.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/devices/rsdt.c",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/devices/rsdt.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/devices/rsdt.c",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/devices/rsdt.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -377,14 +377,14 @@
       "arch/i386/devices/serial.o",
       "arch/i386/devices/serial.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/devices/serial.c",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/devices/serial.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/devices/serial.c",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/devices/serial.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -399,14 +399,14 @@
       "arch/i386/memory/memory_access.o",
       "arch/i386/memory/memory_access.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/memory/memory_access.c",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/memory/memory_access.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/memory/memory_access.c",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/memory/memory_access.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -421,14 +421,14 @@
       "arch/i386/memory/memory_management.o",
       "arch/i386/memory/memory_management.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/memory/memory_management.c",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/memory/memory_management.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/memory/memory_management.c",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/memory/memory_management.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-O2",
@@ -442,14 +442,14 @@
       "arch/i386/memory/rwCR.o",
       "arch/i386/memory/rwCR.S"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/memory/rwCR.S",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/memory/rwCR.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/memory/rwCR.S",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/memory/rwCR.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -464,14 +464,14 @@
       "arch/i386/process/exception_handler.o",
       "arch/i386/process/exception_handler.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/process/exception_handler.c",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/process/exception_handler.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/process/exception_handler.c",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/process/exception_handler.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -486,14 +486,14 @@
       "arch/i386/process/gdt.o",
       "arch/i386/process/gdt.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/process/gdt.c",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/process/gdt.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/process/gdt.c",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/process/gdt.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -508,14 +508,14 @@
       "arch/i386/process/idt.o",
       "arch/i386/process/idt.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/process/idt.c",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/process/idt.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/process/idt.c",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/process/idt.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-O2",
@@ -529,14 +529,14 @@
       "arch/i386/process/exception_caller.o",
       "arch/i386/process/exception_caller.S"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/process/exception_caller.S",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/process/exception_caller.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/process/exception_caller.S",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/process/exception_caller.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-O2",
@@ -550,14 +550,14 @@
       "arch/i386/process/gdt_flush.o",
       "arch/i386/process/gdt_flush.S"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/process/gdt_flush.S",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/process/gdt_flush.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/process/gdt_flush.S",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/process/gdt_flush.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-O2",
@@ -571,14 +571,14 @@
       "arch/i386/process/tss_flush.o",
       "arch/i386/process/tss_flush.S"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/process/tss_flush.S",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/process/tss_flush.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/process/tss_flush.S",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/process/tss_flush.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-std=gnu11",
@@ -593,14 +593,14 @@
       "kernel/kernel.o",
       "kernel/kernel.c"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/kernel/kernel.c",
-    "output": "/home/komessu/projects/pekOS/kernel/kernel/kernel.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/kernel/kernel.c",
+    "output": "/home/komessu/Projects/pekOS/kernel/kernel/kernel.o"
   },
   {
     "arguments": [
       "/home/komessu/opt/cross/bin/i686-elf-gcc",
-      "--sysroot=/home/komessu/projects/pekOS/sysroot",
+      "--sysroot=/home/komessu/Projects/pekOS/sysroot",
       "-isystem=/usr/include",
       "-c",
       "-O2",
@@ -614,8 +614,8 @@
       "arch/i386/crtn.o",
       "arch/i386/crtn.S"
     ],
-    "directory": "/home/komessu/projects/pekOS/kernel",
-    "file": "/home/komessu/projects/pekOS/kernel/arch/i386/crtn.S",
-    "output": "/home/komessu/projects/pekOS/kernel/arch/i386/crtn.o"
+    "directory": "/home/komessu/Projects/pekOS/kernel",
+    "file": "/home/komessu/Projects/pekOS/kernel/arch/i386/crtn.S",
+    "output": "/home/komessu/Projects/pekOS/kernel/arch/i386/crtn.o"
   }
 ]
