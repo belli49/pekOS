@@ -1,5 +1,11 @@
 #include <stdint.h>
 
+typedef struct page_table_struct page_table_t;
+
+struct page_table_struct {
+  uintptr_t pte[1024];
+};
+
 extern void _flush_TLB(void);
 extern int _read_cr0(void);
 extern int _read_cr2(void);
@@ -15,3 +21,4 @@ void* get_physaddr(uintptr_t virtualaddr);
 void map_page(uintptr_t* physaddr, uintptr_t* virtualaddr, uintptr_t flags);
 uintptr_t* find_free_virtaddr(void);
 uintptr_t* find_free_physaddr(void);
+uintptr_t* allocate_pt(void);

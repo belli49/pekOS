@@ -18,6 +18,22 @@ stack_bottom:
 .skip 16384 # 16 KiB
 stack_top:
 
+# Macro to allocate space for k page tables
+.altmacro
+
+.macro allocate_pt num
+boot_page_table\num :
+  .skip 4096
+.endm
+
+.macro allocate_k_pts k
+  i = 0
+  .rept \k
+    allocate_pt %i
+    i = i + 1
+  .endr
+.endm
+
 # Preallocate pages used for paging. Don't hard-code addresses and assume they
 # are available, as the bootloader might have loaded its multiboot structures or
 # modules there. This lets the bootloader know it must avoid the addresses.
@@ -25,13 +41,9 @@ stack_top:
   .align 4096
 boot_page_directory:
   .skip 4096
-# First kernel page table
-boot_page_table1:
-  .skip 4096
-# Added new table for testing
-boot_page_table2:
-  .skip 4096
-# Further page tables may be required if the kernel grows beyond 3 MiB.
+# Preallocate 2 PT's
+# Might need more as kernel grows bigger
+allocate_k_pts 2
 
 # The kernel entry point.
 .section .multiboot.text, "a"
@@ -42,11 +54,10 @@ _start:
   movl $(boot_page_table1 - 0xC0000000), %edi
 # First address to map is address 0.
 # TODO: Mapping everything from address 0 until end of kernel.
-#       Alternatively map the first
-#       1 MiB as it can be generally useful, and there's no need to
-#       specially map the VGA buffer.
+#       Alternatively, map 1MiB as by doing so
+#       there's no need to specially map the VGA buffer.
   movl $0, %esi
-# Map 1023 pages. The 1024th will be the VGA text buffer.
+# Map up to 1023 pages. The 1024th will be the VGA text buffer.
   movl $1023, %ecx
 
 1:
