@@ -3,7 +3,6 @@
                                     // here, it is the second entry on the GDT => 1 (idx) * 8 (size of GDT entry)
 
 #include <stdint.h>
-#include <string.h>
 
 #include <kernel/idt.h>
 #include <kernel/serial.h>

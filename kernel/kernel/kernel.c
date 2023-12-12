@@ -11,6 +11,8 @@
 
 #include <kernel/rsdt.h>
 
+void tests();
+
 void kernel_main(multiboot_info_t* mbd, uint32_t magic) {	
   terminal_initialize();
   init_serial();
@@ -21,11 +23,14 @@ void kernel_main(multiboot_info_t* mbd, uint32_t magic) {
 
   printf("Hello, welcome to pekOS!\n");
 
-  uintptr_t* ptr = (uintptr_t*) 0xC0300000;
-  *ptr = 0;
-  printf("%x\n", *((uintptr_t*) 0x30300000));
+  // tests();
+}
+
+void tests() {
+  // page allocation tests
+  uintptr_t* ptr = (uintptr_t*) 0x30300000;
+  *ptr = 2;
+  // printf("%x\n", *((uintptr_t*) 0x30300000));
   // printf("%x\n", *((uintptr_t*) 0xC0300000));
-
-
 
 }

@@ -4,8 +4,6 @@
 #include <kernel/exception_handler.h>
 #include <kernel/memory_management.h>
 
-int t = 0;
-
 void exception_handler() {
   __asm__ volatile ("cli; hlt"); // Completely hangs the computer
 }
@@ -35,15 +33,18 @@ void page_fault_handler(uintptr_t* virtual_address, uint32_t error_code) {
   } 
 
 
-  printf("Allocating kernel page\n");
-
-  // find physical address
-  uintptr_t* physaddr = find_free_physaddr();
-  printf("at: %x\n", (uintptr_t) physaddr);
+  uintptr_t* physaddr;
+  if (((uintptr_t) virtual_address >> 22) == 0x3FF) {
+    printf("PT not present in PD\n");
+    physaddr = allocate_pt();
+  } else {
+    physaddr = find_free_physaddr();
+    printf("Mapping address ");
+    // find physical address
+    printf("to phys: %x\n", (uintptr_t) physaddr);
+  }
 
   map_page(physaddr, virtual_address, 3);
 
   printf("Page successfully mapped - resuming execution\n\n");
-  t++;
-  if (t == 2) exception_handler();
 }
