@@ -1,3 +1,9 @@
+.global _flush_TLB
+_flush_TLB:
+  movl %cr3, %eax
+  movl %eax, %cr3
+  ret
+
 .global _read_cr0
 _read_cr0:
   movl %cr0, %eax

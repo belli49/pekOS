@@ -1,5 +1,6 @@
 #include <stdint.h>
 
+extern void _flush_TLB(void);
 extern int _read_cr0(void);
 extern int _read_cr2(void);
 extern int _read_cr3(void);
