@@ -2,7 +2,8 @@
 #include <stdio.h>
 
 #include <kernel/exception_handler.h>
-#include <kernel/memory_management.h>
+#include <kernel/paging.h>
+
 
 void exception_handler() {
   __asm__ volatile ("cli; hlt"); // Completely hangs the computer

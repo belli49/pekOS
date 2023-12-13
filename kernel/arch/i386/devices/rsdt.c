@@ -4,6 +4,7 @@
 
 #include <kernel/rsdt.h>
 #include <kernel/memory_access.h>
+#include <kernel/paging.h>
 
 #define KERNEL_MAP_START_LOCATION 0xC0000000
 #define ADDR_NUMBER_OF_KIB_BEFORE_EBDA (KERNEL_MAP_START_LOCATION + 0x413)
@@ -24,19 +25,14 @@ void init_rsdt() {
     // ACPI version 1.0
     rsdt = (RSDT*) find_RSDT();
 
-    // TODO: add basic memory mapping functionality?
-    // We'll have to memory map quite a lot of stuff
-    // before we get to the point of working with 
-    // process, so adding basic memory mapping functionality
-    // seems reasonable (apparently a there's a lot of MMIO
-    // mapped close to 0xC0000000 physical)
-    // else we'd have to keep relying on assembly
-    //
     // We can't continue before doing that because
     // the RSDT seems to be outside the currently mapped range
 
-    printf("%x\n", (uintptr_t) rsdt);
-    // printf("%s\n", rsdt->h.Signature);
+    printf("rsdt physical location: %x\n", (uintptr_t) rsdt);
+
+    // map page to rsdt location so we can access it
+        map_page((uintptr_t*) ((uintptr_t) rsdt & ~0xFFF), find_free_virtaddr(), 3);
+    printf("%s\n", rsdt->h.Signature);
   }
 }
 
