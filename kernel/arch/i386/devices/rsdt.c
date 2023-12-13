@@ -15,35 +15,68 @@ RSDP* rsdp;
 RSDT* rsdt;
 XSDT* xsdt;
 
+uintptr_t* rsdt_physaddr;
+uint32_t entries;
+
 void init_rsdt() {
   rsdp = find_RSDP();
+  rsdt_physaddr = find_RSDT();
+
+
+  printf("rsdt physical location: %x\n", (uintptr_t) rsdt_physaddr);
+
+  // map page to rsdt location so we can access it
+  uintptr_t* page_virt_location = find_free_virtaddr();
+  map_page((uintptr_t*) ((uintptr_t) rsdt_physaddr & ~0xFFF), page_virt_location, 3);
+  printf("new page allocated at: %x\n", (uintptr_t) rsdt_physaddr & ~0xFFF);
+
   
   if (ACPI_version) {
     // ACPI version 2.0
-    xsdt = (XSDT*) find_RSDT();
+
+    xsdt = (XSDT*) ((uintptr_t) page_virt_location + ((uintptr_t) rsdt_physaddr & 0xFFF));
+
+    for (uint32_t i = 0; i < sizeof(xsdt->h.signature); i++) {
+      printf("XSDT signature: %c", xsdt->h.signature[i]);
+    }
+    printf("\n");
+
+    // length does not include header size
+    entries = (xsdt->h.length - sizeof(xsdt->h)) / 8;
+
+
   } else {
     // ACPI version 1.0
-    rsdt = (RSDT*) find_RSDT();
 
-    // We can't continue before doing that because
-    // the RSDT seems to be outside the currently mapped range
+    // rsdt virtual location
+    rsdt = (RSDT*) ((uintptr_t) page_virt_location + ((uintptr_t) rsdt_physaddr & 0xFFF));
 
-    printf("rsdt physical location: %x\n", (uintptr_t) rsdt);
+    for (uint32_t i = 0; i < sizeof(rsdt->h.signature); i++) {
+      printf("RSDT signature: %c", rsdt->h.signature[i]);
+    }
+    printf("\n");
 
-    // map page to rsdt location so we can access it
-        map_page((uintptr_t*) ((uintptr_t) rsdt & ~0xFFF), find_free_virtaddr(), 3);
-    printf("%s\n", rsdt->h.Signature);
+    // length does not include header size
+    entries = (rsdt->h.length - sizeof(rsdt->h)) / 4;
+
+    for (uint32_t entry = 0; entry < entries; entry++) {
+      // physical address to sdt
+      ACPISDTHeader* sdt_header = (void*) rsdt->pointer_to_other_SDT[entry];
+
+
+      printf("%s\n", sdt_header->signature);
+    }
   }
 }
 
 void* find_RSDT() {
-  if (!rsdp->Revision) {
+  if (!rsdp->revision) {
     // ACPI 1.0 -> use RSDT
-    return (void*) rsdp->RsdtAddress;
+    return (void*) rsdp->rsdt_address;
   }
 
   // ACPI 2.0 -> use XSDT
-  return (void*) ((uint32_t) ((XSDP*) rsdp)->XsdtAddress);
+  return (void*) ((uint32_t) ((XSDP*) rsdp)->xsdt_address);
 }
 
 RSDP* find_RSDP() {
@@ -97,7 +130,7 @@ RSDP* find_RSDP() {
 bool do_checksum_ACPISDT(ACPISDTHeader *tableHeader) {
   unsigned char sum = 0;
 
-  for (uint32_t i = 0; i < tableHeader->Length; i++) {
+  for (uint32_t i = 0; i < tableHeader->length; i++) {
     sum += ((char *) tableHeader)[i];
   }
 
@@ -106,7 +139,7 @@ bool do_checksum_ACPISDT(ACPISDTHeader *tableHeader) {
 
 bool do_checksum_RSDP(RSDP* rsdp) {
   unsigned char sum = 0;
-  ACPI_version = rsdp->Revision;
+  ACPI_version = rsdp->revision;
 
   if (ACPI_version) printf("RSDP using ACPI version 2\n");
   else printf("RSDP using ACPI version 1\n");
@@ -121,11 +154,11 @@ bool do_checksum_RSDP(RSDP* rsdp) {
 }
 
 void *find_entry_in_RSDT(char* signature) {
-  uint32_t entries = (rsdt->h.Length - sizeof(rsdt->h)) / 4;
+  uint32_t entries = (rsdt->h.length - sizeof(rsdt->h)) / 4;
 
   for (uint32_t i = 0; i < entries; i++) {
-    ACPISDTHeader *h = (ACPISDTHeader *) rsdt->PointerToOtherSDT[i];
-    if (!strncmp(h->Signature, signature, 4))
+    ACPISDTHeader *h = (ACPISDTHeader *) rsdt->pointer_to_other_SDT[i];
+    if (!strncmp(h->signature, signature, 4))
       return (void *) h;
   }
 
