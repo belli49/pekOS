@@ -51,8 +51,9 @@ void init_rsdt() {
     // rsdt virtual location
     rsdt = (RSDT*) ((uintptr_t) page_virt_location + ((uintptr_t) rsdt_physaddr & 0xFFF));
 
+    printf("RSDT signature: ");
     for (uint32_t i = 0; i < sizeof(rsdt->h.signature); i++) {
-      printf("RSDT signature: %c", rsdt->h.signature[i]);
+      printf("%c", rsdt->h.signature[i]);
     }
     printf("\n");
 
@@ -61,10 +62,11 @@ void init_rsdt() {
 
     for (uint32_t entry = 0; entry < entries; entry++) {
       // physical address to sdt
-      ACPISDTHeader* sdt_header = (void*) rsdt->pointer_to_other_SDT[entry];
 
+      ACPISDTHeader* sdt_header = (void*) (rsdt->pointer_to_other_SDT + entry);
 
-      printf("%s\n", sdt_header->signature);
+      printf("%x\n", sdt_header);
+      // printf("%s\n", sdt_header->signature);
     }
   }
 }
