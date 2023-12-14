@@ -63,10 +63,24 @@ void init_rsdt() {
     for (uint32_t entry = 0; entry < entries; entry++) {
       // physical address to sdt
 
-      ACPISDTHeader* sdt_header = (void*) (rsdt->pointer_to_other_SDT + entry);
+      ACPISDTHeader* sdt_header = (ACPISDTHeader*) 
+        *(&rsdt->pointer_to_other_SDT + entry);
 
-      printf("%x\n", sdt_header);
-      // printf("%s\n", sdt_header->signature);
+
+      // map location of sdt
+      uintptr_t* page_virt_location = find_free_virtaddr();
+      map_page((uintptr_t*) ((uintptr_t) (sdt_header) & ~0xFFF), page_virt_location, 3);
+      rsdt->pointer_to_other_SDT = (uint32_t*) ((uintptr_t) page_virt_location + 
+          ((uintptr_t) sdt_header & 0xFFF));
+
+
+      // print sdt header
+      sdt_header = (ACPISDTHeader*) rsdt->pointer_to_other_SDT;
+      for (uint32_t i = 0; i < 4; i++) {
+        printf("%c", sdt_header->signature[i]);
+      }
+      printf("\n");
+
     }
   }
 }
