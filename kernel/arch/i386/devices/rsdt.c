@@ -36,15 +36,37 @@ void init_rsdt() {
 
     xsdt = (XSDT*) ((uintptr_t) page_virt_location + ((uintptr_t) rsdt_physaddr & 0xFFF));
 
+
+    printf("XSDT signature: ");
     for (uint32_t i = 0; i < sizeof(xsdt->h.signature); i++) {
-      printf("XSDT signature: %c", xsdt->h.signature[i]);
+      printf("%c", xsdt->h.signature[i]);
     }
     printf("\n");
 
     // length does not include header size
     entries = (xsdt->h.length - sizeof(xsdt->h)) / 8;
+    printf("n. of entries: %d\n", entries);
+
+    for (uint64_t entry = 0; entry < entries; entry++) {
+      // physical address to sdt
+
+      ACPISDTHeader* sdt_header = (ACPISDTHeader*) *(&xsdt->pointer_to_other_SDT + 2 * entry);
+      printf("%x: ", (uintptr_t) sdt_header);
 
 
+      // map location of sdt
+      uintptr_t* page_virt_location = find_free_virtaddr();
+      map_page((uintptr_t*) ((uintptr_t) (sdt_header) & ~0xFFF), page_virt_location, 3);
+      *(&xsdt->pointer_to_other_SDT + entry) = (uint64_t*) ((uintptr_t) page_virt_location + 
+          ((uintptr_t) sdt_header & 0xFFF));
+
+      // print sdt header
+      sdt_header = (ACPISDTHeader*) *(&xsdt->pointer_to_other_SDT + entry);
+      for (uint32_t i = 0; i < 4; i++) {
+        printf("%c", sdt_header->signature[i]);
+      }
+      printf("\n");
+    }
   } else {
     // ACPI version 1.0
 
@@ -59,23 +81,22 @@ void init_rsdt() {
 
     // length does not include header size
     entries = (rsdt->h.length - sizeof(rsdt->h)) / 4;
+    printf("n. of entries: %d\n", entries);
 
     for (uint32_t entry = 0; entry < entries; entry++) {
       // physical address to sdt
 
-      ACPISDTHeader* sdt_header = (ACPISDTHeader*) 
-        *(&rsdt->pointer_to_other_SDT + entry);
-
+      ACPISDTHeader* sdt_header = (ACPISDTHeader*) *(&rsdt->pointer_to_other_SDT + entry);
 
       // map location of sdt
       uintptr_t* page_virt_location = find_free_virtaddr();
       map_page((uintptr_t*) ((uintptr_t) (sdt_header) & ~0xFFF), page_virt_location, 3);
-      rsdt->pointer_to_other_SDT = (uint32_t*) ((uintptr_t) page_virt_location + 
+      *(&rsdt->pointer_to_other_SDT + entry) = (uint32_t*) ((uintptr_t) page_virt_location + 
           ((uintptr_t) sdt_header & 0xFFF));
 
 
       // print sdt header
-      sdt_header = (ACPISDTHeader*) rsdt->pointer_to_other_SDT;
+      sdt_header = (ACPISDTHeader*) *(&rsdt->pointer_to_other_SDT + entry);
       for (uint32_t i = 0; i < 4; i++) {
         printf("%c", sdt_header->signature[i]);
       }
@@ -92,7 +113,7 @@ void* find_RSDT() {
   }
 
   // ACPI 2.0 -> use XSDT
-  return (void*) ((uint32_t) ((XSDP*) rsdp)->xsdt_address);
+  return (void*) ((uintptr_t) ((XSDP*) rsdp)->xsdt_address);
 }
 
 RSDP* find_RSDP() {
