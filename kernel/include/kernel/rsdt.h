@@ -8,47 +8,47 @@ typedef struct RSDP_struct RSDP;
 typedef struct XSDP_struct XSDP;
 
 struct ACPISDTHeader_struct {
-  char Signature[4];
-  uint32_t Length;
-  uint8_t Revision;
-  uint8_t Checksum;
+  char signature[4];
+  uint32_t length;
+  uint8_t revision;
+  uint8_t checksum;
   char OEMID[6];
   char OEMTableID[8];
   uint32_t OEMRevision;
-  uint32_t CreatorID;
-  uint32_t CreatorRevision;
+  uint32_t creatorID;
+  uint32_t creator_revision;
 } __attribute__ ((packed));
 
 struct RSDT_struct {
   ACPISDTHeader h;
   // uint32_t PointerToOtherSDT[(h.Length - sizeof(h)) / 4];
-  uint32_t* PointerToOtherSDT;
+  uint32_t* pointer_to_other_SDT;
 };
 
 struct XSDT_struct {
   ACPISDTHeader h;
   // uint64_t PointerToOtherSDT[(h.Length - sizeof(h)) / 8];
-  uint64_t* PointerToOtherSDT;
+  uint64_t* pointer_to_other_SDT;
 };
 
 struct RSDP_struct {
- char Signature[8];
- uint8_t Checksum;
+ char signature[8];
+ uint8_t checksum;
  char OEMID[6];
- uint8_t Revision;
- uint32_t RsdtAddress;
+ uint8_t revision;
+ uint32_t rsdt_address;
 } __attribute__ ((packed));
 
 struct XSDP_struct {
- char Signature[8];
- uint8_t Checksum;
+ char signature[8];
+ uint8_t checksum;
  char OEMID[6];
- uint8_t Revision;
- uint32_t RsdtAddress;      // deprecated since version 2.0
+ uint8_t revision;
+ uint32_t rsdt_address;      // deprecated since version 2.0
  
- uint32_t Length;
- uint64_t XsdtAddress;
- uint8_t ExtendedChecksum;
+ uint32_t length;
+ uint64_t xsdt_address;
+ uint8_t extended_checksum;
  uint8_t reserved[3];
 } __attribute__ ((packed));
 
