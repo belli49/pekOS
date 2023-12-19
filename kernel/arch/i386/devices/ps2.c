@@ -1,7 +1,17 @@
-#include <kernel/rsdt.h>
+#include <stdio.h>
+#include <kernel/fadt.h>
 
-ACPISDTHeader* FADT;
+FADT* fadt;
 
 void init_fadt() {
-  FADT = find_by_header("FACP");
+  fadt = (FADT*) find_by_header("FACP");
+
+  if (fadt->BootArchitectureFlags & 2) {
+    // there is PS/2 controller
+    printf("PS/2 ok\n");
+  } else {
+    // no PS/2 controller
+
+    printf("PS/2 ok\n");
+  }
 }

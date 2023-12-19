@@ -206,7 +206,7 @@ void *find_entry_in_RSDT(char* signature) {
   return NULL;
 }
 
-ACPISDTHeader* find_by_header(char head[5]) {
+void* find_by_header(char head[5]) {
   // takes in header string and finds it in RSDT
   ACPISDTHeader* location = NULL;
   

@@ -59,7 +59,7 @@ RSDP* find_RSDP(void);
 void *findFACP(void *RootSDT);
 bool do_checksum_ACPISDT(ACPISDTHeader *tableHeader);
 bool do_checksum_RSDP(RSDP* rsdp);
-ACPISDTHeader* find_by_header(char head[5]);
+void* find_by_header(char head[5]);
 
 
 extern bool ACPI_version;

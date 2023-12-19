@@ -8,11 +8,11 @@
 #include <kernel/idt.h>
 #include <kernel/memory_access.h>
 #include <kernel/paging.h>
-#include <kernel/ps2.h>
+#include <kernel/fadt.h>
+// #include <kernel/rsdt.h>
 
 #include <kernel/multiboot.h>
 
-#include <kernel/rsdt.h>
 
 void tests();
 
