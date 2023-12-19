@@ -10,7 +10,7 @@
 #define ADDR_NUMBER_OF_KIB_BEFORE_EBDA (KERNEL_MAP_START_LOCATION + 0x413)
 
 
-bool ACPI_version;
+bool ACPI_version; // 0 if version 1.0, 1 if 2.0
 RSDP* rsdp;
 RSDT* rsdt;
 XSDT* xsdt;
@@ -89,6 +89,9 @@ void init_rsdt() {
       ACPISDTHeader* sdt_header = (ACPISDTHeader*) *(&rsdt->pointer_to_other_SDT + entry);
 
       // map location of sdt
+      // TODO: account for size of table when mapping
+      // TODO: do it in a cleaner way? without mapping a new page for each
+      // different table even if they fall in the same physical page
       uintptr_t* page_virt_location = find_free_virtaddr();
       map_page((uintptr_t*) ((uintptr_t) (sdt_header) & ~0xFFF), page_virt_location, 3);
       *(&rsdt->pointer_to_other_SDT + entry) = (uint32_t*) ((uintptr_t) page_virt_location + 
@@ -201,4 +204,30 @@ void *find_entry_in_RSDT(char* signature) {
 
   // No FACP found
   return NULL;
+}
+
+ACPISDTHeader* find_by_header(char head[5]) {
+  // takes in header string and finds it in RSDT
+  ACPISDTHeader* location = NULL;
+  
+  if (ACPI_version) {
+    // use XSDT
+
+  } else {
+    // use RSDT
+    entries = (rsdt->h.length - sizeof(rsdt->h)) / 4;
+
+    for (uint32_t entry = 0; entry < entries; entry++) {
+      ACPISDTHeader* sdt_header = (ACPISDTHeader*) *(&rsdt->pointer_to_other_SDT + entry);
+
+      if (!memcmp(sdt_header->signature, head, 4)) {
+        printf("Found %s at %x\n", head, (uintptr_t) sdt_header);
+        location = (ACPISDTHeader*) sdt_header;
+        break;
+      }
+    }
+  }
+
+  if (!location) printf("SDT not found\n");
+  return location;
 }

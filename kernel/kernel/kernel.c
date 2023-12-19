@@ -8,6 +8,7 @@
 #include <kernel/idt.h>
 #include <kernel/memory_access.h>
 #include <kernel/paging.h>
+#include <kernel/ps2.h>
 
 #include <kernel/multiboot.h>
 
@@ -23,6 +24,7 @@ void kernel_main(multiboot_info_t* mbd, uint32_t magic) {
   init_page_allocation();
   // init_mm();
   init_rsdt();
+  init_fadt();
 
   printf("Hello, welcome to pekOS!\n");
 
