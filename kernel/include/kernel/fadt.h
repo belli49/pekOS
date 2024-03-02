@@ -1,8 +1,6 @@
 #include <stdint.h>
 #include <kernel/rsdt.h>
 
-void init_fadt();
-
 typedef struct GenericAddressStructure_struct GenericAddressStructure;
 typedef struct FADT_struct FADT;
 

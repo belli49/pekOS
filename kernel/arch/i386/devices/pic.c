@@ -1,3 +1,7 @@
+#include <kernel/iox.h>
+#include <kernel/pic.h>
+
+
 #define PIC1		0x20		/* IO base address for master PIC */
 #define PIC2		0xA0		/* IO base address for slave PIC */
 #define PIC1_COMMAND	PIC1
@@ -29,7 +33,18 @@
 
 
 
-#include <kernel/iox.h>
+
+void init_pic() {
+  PIC_remap(32, 40);
+  mask_pic_interrupts();
+}
+
+
+void mask_pic_interrupts() {
+  // mask all interrupts
+  outb(PIC1_DATA, 0xFF);  // Mask all interrupts on master PIC
+  outb(PIC2_DATA, 0xFF);  // Mask all interrupts on slave PIC
+}
 
 
 /*

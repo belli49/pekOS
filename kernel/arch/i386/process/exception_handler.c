@@ -6,8 +6,26 @@
 
 
 void exception_handler() {
+  printf("It was an exception :(\n");
   __asm__ volatile ("cli; hlt"); // Completely hangs the computer
 }
+
+
+
+
+void test_exception_handler() {
+  printf("Test exception handler called\n");
+  __asm__ volatile ("cli; hlt"); // Completely hangs the computer
+}
+
+
+
+void system_timer_interrupt() {
+  printf("System timer interrupt called\n");
+  __asm__ volatile ("cli; hlt"); // Completely hangs the computer
+}
+
+
 
 void page_fault_handler(uintptr_t* virtual_address, uint32_t error_code) {
   // fix error code and general interrupt calling

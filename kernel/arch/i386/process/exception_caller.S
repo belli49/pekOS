@@ -63,6 +63,23 @@ isr_no_err_stub 31
 
 
 
+# system timer (32)
+isr_stub_32:
+  pushal
+
+  movl %cr2, %eax
+  pushl 32(%esp)
+  pushl %eax
+  cld
+  call system_timer_interrupt
+  addl $8, %esp
+  
+  popal
+  addl $4, %esp
+  iret
+
+
+
 .altmacro
 
 .macro create_isr_stub num
