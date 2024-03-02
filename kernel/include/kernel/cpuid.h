@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdbool.h>
 
 enum {
   CPUID_FEAT_ECX_SSE3         = 1 << 0, 
@@ -82,20 +83,20 @@ static inline int cpuid_string(int code, uint32_t where[4]) {
 }
 
 
-// MSR
 
+// MSR
 const uint32_t CPUID_FLAG_MSR = 1 << 5;
 
-bool cpuHasMSR() {
+bool cpu_has_msr() {
    static uint32_t a, d; // eax, edx
    cpuid(1, &a, &d);
    return d & CPUID_FLAG_MSR;
 }
  
-void cpuGetMSR(uint32_t msr, uint32_t *lo, uint32_t *hi) {
+void cpu_get_msr(uint32_t msr, uint32_t *lo, uint32_t *hi) {
    asm volatile("rdmsr" : "=a"(*lo), "=d"(*hi) : "c"(msr));
 }
  
-void cpuSetMSR(uint32_t msr, uint32_t lo, uint32_t hi) {
+void cpu_set_msr(uint32_t msr, uint32_t lo, uint32_t hi) {
    asm volatile("wrmsr" : : "a"(lo), "d"(hi), "c"(msr));
 }

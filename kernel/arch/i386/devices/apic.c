@@ -1,14 +1,31 @@
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 
+#include <kernel/apic.h>
 #include <kernel/cpuid.h>
 
 #define IA32_APIC_BASE_MSR 0x1B
 #define IA32_APIC_BASE_MSR_BSP 0x100 // Processor is a BSP
 #define IA32_APIC_BASE_MSR_ENABLE 0x800
 
+MADT* madt;
 
 // APIC
+void init_apic() {
+  if (!cpu_has_msr() || !check_apic()) {
+    printf("No msr available; aborting apic init\n");
+    return;
+  }
+
+  madt = find_by_header("APIC");
+
+  // TODO: find spurrious interrupt vector register
+  // careful cause it might be phys location
+
+  enable_apic();
+  printf("Apic enabled\n");
+}
 
 /** returns a 'true' value if the CPU supports APIC
  *  and if the local APIC hasn't been disabled in MSRs
@@ -29,7 +46,7 @@ void cpu_set_apic_base(uintptr_t apic) {
    edx = (apic >> 32) & 0x0f;
 #endif
  
-   cpuSetMSR(IA32_APIC_BASE_MSR, eax, edx);
+   cpu_set_msr(IA32_APIC_BASE_MSR, eax, edx);
 }
 
 /**
@@ -38,7 +55,9 @@ void cpu_set_apic_base(uintptr_t apic) {
  */
 uintptr_t cpu_get_apic_base() {
    uint32_t eax, edx;
-   cpuGetMSR(IA32_APIC_BASE_MSR, &eax, &edx);
+   cpu_get_msr(IA32_APIC_BASE_MSR, &eax, &edx);
+
+   printf("eax: %x\n", eax);
  
 #ifdef __PHYSICAL_MEMORY_EXTENSION__
    return (eax & 0xfffff000) | ((edx & 0x0f) << 32);
@@ -54,5 +73,6 @@ void enable_apic() {
     cpu_set_apic_base(cpu_get_apic_base());
  
     /* Set the Spurious Interrupt Vector Register bit 8 to start receiving interrupts */
+
     // write_reg(0xF0, ReadRegister(0xF0) | 0x100);
 }

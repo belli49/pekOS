@@ -212,6 +212,7 @@ void* find_by_header(char head[5]) {
   
   if (ACPI_version) {
     // use XSDT
+    // TODO: finish implementation
 
   } else {
     // use RSDT

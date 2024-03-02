@@ -161,7 +161,7 @@ void init_ps2() {
     if (command_res == 0xFA) printf("ACK\n");
 
 
-    print_keyboard_scan_codes();
+    // print_keyboard_scan_codes();
 
   } else {
     // no PS/2 controller

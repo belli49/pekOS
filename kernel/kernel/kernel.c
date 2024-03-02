@@ -11,9 +11,17 @@
 #include <kernel/fadt.h>
 #include <kernel/ps2.h>
 #include <kernel/pic.h>
-// #include <kernel/rsdt.h>
+#include <kernel/apic.h>
 
 #include <kernel/multiboot.h>
+
+
+#ifndef ACPISDT_HEADER_DEFINED
+#define ACPISDT_HEADER_DEFINED
+
+#include <kernel/rsdt.h>
+
+#endif
 
 
 void tests();
@@ -27,6 +35,7 @@ void kernel_main(multiboot_info_t* mbd, uint32_t magic) {
   init_page_allocation();
   // init_mm();
   init_rsdt();
+  init_apic();
   init_ps2();
 
   printf("Hello, welcome to pekOS!\n");

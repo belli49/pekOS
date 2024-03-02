@@ -1,5 +1,11 @@
 #include <stdint.h>
+
+#ifndef ACPISDT_HEADER_DEFINED
+#define ACPISDT_HEADER_DEFINED
+
 #include <kernel/rsdt.h>
+
+#endif
 
 typedef struct GenericAddressStructure_struct GenericAddressStructure;
 typedef struct FADT_struct FADT;
