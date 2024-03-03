@@ -56,10 +56,8 @@ void init_ps2() {
     uint8_t response = read_ps2_data();
     
     if (response != 0x55) {
-      printf("didn't work :(\n");
+      printf("PS/2 test failed\n");
       return;
-    } else {
-      printf("worked :)\n");
     }
 
     // restore controller config byte (some hardware needs this behaviour)
@@ -71,8 +69,6 @@ void init_ps2() {
     // detect if dual channel and disable second channel if so
     bool is_dual_channel = controller_config & 0x20;
     if (is_dual_channel) {
-      printf("Checking if dual channel ps2 supported \n");
-
       // enable second port
       send_ps2_command(0xA8);
 
@@ -80,11 +76,9 @@ void init_ps2() {
       send_ps2_command(0x20);
       is_dual_channel = !(read_ps2_data() & 0x20); // if bit is clear it is dual channel
 
-      // disable second port
-      if (is_dual_channel) {
-        printf("Dual channel ps/2 detected\n");
-        send_ps2_command(0xA7);
-      }
+      // disable second port if needed
+      if (is_dual_channel) send_ps2_command(0xA7);
+      else printf("PS/2 dual channel not supported\n");
     }
 
 
@@ -109,7 +103,6 @@ void init_ps2() {
 
 
     /*
-     * TODO: first need to set up APIC
     // enable interrupts
     outb(PS2_COMMAND_REGISTER, 0x20);
     controller_config = inb(PS2_DATA_PORT) | 3;
@@ -125,10 +118,10 @@ void init_ps2() {
     send_device_data(0xFF);
     uint8_t reset_res = read_ps2_data();
     if (reset_res == 0xFA) {
-      printf("reset 1 res: ACK\n");
+      // printf("reset 1 res: ACK\n");
 
       reset_res = read_ps2_data();
-      if (reset_res == 0xAA) printf("Reset successful for port 1\n");
+      if (reset_res != 0xAA) printf("Reset failed for port 1\n");
     }
 
     // second port
@@ -136,10 +129,10 @@ void init_ps2() {
     send_device_data(0xFF);
     reset_res = read_ps2_data();
     if (reset_res == 0xFA) {
-      printf("reset 2 res: ACK\n");
+      // printf("reset 2 res: ACK\n");
 
       reset_res = read_ps2_data();
-      if (reset_res == 0xAA) printf("Reset successful for port 2\n");
+      if (reset_res != 0xAA) printf("Reset failed for port 2\n");
     }
 
 
@@ -158,7 +151,7 @@ void init_ps2() {
     // enable scanning
     send_device_data(0xF4);
     command_res = read_ps2_data();
-    if (command_res == 0xFA) printf("ACK\n");
+    if (command_res != 0xFA) printf("Scanning enabling failed\n");
 
 
     // print_keyboard_scan_codes();
@@ -205,27 +198,27 @@ uint8_t detect_ps2_device(uint8_t port) {
   if (port == 2) send_ps2_command(0xD4);
   send_device_data(0xF5);
   res = read_ps2_data();
-  if (res == 0xFA) printf("ACK\n");
+  // if (res == 0xFA) printf("ACK\n");
 
   // Send command to read device ID
   send_device_data(0xF2);
   res = read_ps2_data();
-  if (res == 0xFA) printf("ACK\n");
+  // if (res == 0xFA) printf("ACK\n");
 
   // Read response from the PS/2 device
   res = read_ps2_data();
 
   io_wait();
   res2 = read_ps2_data();
-  printf("%x, %x\n", res, res2);
+  // printf("%x, %x\n", res, res2);
 
   // Determine device type based on response
   if (res == 0xAB) 
-    printf("PS/2 device connected to the port: Keyboard\n");
+    printf("PS/2 device connected to port %d: Keyboard\n", port);
   else if (res == 0x00)
-    printf("PS/2 device connected to the port: Mouse\n");
+    printf("PS/2 device connected to port %d: Mouse\n", port);
   else
-    printf("PS/2 device connected to the port: Unknown (ID: %x)\n", res);
+    printf("PS/2 device connected to port %d: Unknown (ID: %x)\n", port, res);
 
   return res;
 }

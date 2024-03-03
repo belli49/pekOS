@@ -63,7 +63,9 @@ isr_no_err_stub 31
 
 
 
-# system timer (32)
+# other IRQs (>= 32)
+
+# ps/2 kbd io apic (32)
 isr_stub_32:
   pushal
 
@@ -71,12 +73,34 @@ isr_stub_32:
   pushl 32(%esp)
   pushl %eax
   cld
-  call system_timer_interrupt
+  call test_exception_handler
   addl $8, %esp
   
   popal
   addl $4, %esp
   iret
+
+
+
+.altmacro
+
+.macro isr_other num
+isr_stub_\num:
+  call exception_handler
+  iret
+.endm
+
+.macro loop_insert_other_irqs
+  i = 33
+  .rept 223
+    isr_other %i
+    i = i + 1
+  .endr
+.endm
+
+loop_insert_other_irqs
+
+
 
 
 
@@ -88,7 +112,7 @@ isr_stub_32:
 
 .macro loop_insert_stub
   i = 0
-  .rept 32
+  .rept 256
     create_isr_stub %i
     i = i + 1
   .endr

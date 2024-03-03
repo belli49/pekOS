@@ -8,15 +8,24 @@
 
 #endif
 
+uintptr_t find_MADT_entry_by_type(uint32_t type);
 void init_apic(void);
 bool check_apic(void);
 void cpu_set_apic_base(uintptr_t apic);
 uintptr_t cpu_get_apic_base(void);
 void enable_apic(void);
 
+// apic
+uint32_t read_register(uintptr_t register_offset);
+void write_register(uintptr_t register_offset, uint32_t value);
+
+// ioapic
+uint32_t read_ioapic_register(const uintptr_t apic_base, const uint8_t offset);
+void write_ioapic_register(const uintptr_t apic_base, const uint8_t offset, const uint32_t val);
+
+
 
 // MADT
-
 /* after the MADT struct there are a number of
  * variable-length records
  */
