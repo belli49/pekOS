@@ -14,6 +14,8 @@ bool check_apic(void);
 void cpu_set_apic_base(uintptr_t apic);
 uintptr_t cpu_get_apic_base(void);
 void enable_apic(void);
+void apic_start_timer(void);
+void apic_send_eoi(void);
 
 // apic
 uint32_t read_register(uintptr_t register_offset);

@@ -102,13 +102,11 @@ void init_ps2() {
 
 
 
-    /*
     // enable interrupts
-    outb(PS2_COMMAND_REGISTER, 0x20);
-    controller_config = inb(PS2_DATA_PORT) | 3;
-    outb(PS2_COMMAND_REGISTER, 0x60);
-    outb(PS2_DATA_PORT, controller_config);
-    */
+    send_ps2_command(0x20);
+    controller_config = read_ps2_data() | 3;
+    send_ps2_command(0x60);
+    send_device_data(controller_config);
 
 
 
@@ -147,13 +145,13 @@ void init_ps2() {
 
 
 
-    // test device 1 by polling
     // enable scanning
     send_device_data(0xF4);
     command_res = read_ps2_data();
     if (command_res != 0xFA) printf("Scanning enabling failed\n");
 
 
+    // test device 1 by polling
     // print_keyboard_scan_codes();
 
   } else {

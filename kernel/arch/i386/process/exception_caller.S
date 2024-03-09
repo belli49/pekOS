@@ -40,6 +40,7 @@ isr_stub_14:
   addl $8, %esp
   
   popal
+# is this correct? check later
   addl $4, %esp
   iret
 
@@ -65,23 +66,18 @@ isr_no_err_stub 31
 
 # other IRQs (>= 32)
 
-# ps/2 kbd io apic (32)
+# apic timer interrupt (32)
 isr_stub_32:
   pushal
 
-  movl %cr2, %eax
-  pushl 32(%esp)
-  pushl %eax
-  cld
   call test_exception_handler
-  addl $8, %esp
-  
+
   popal
-  addl $4, %esp
   iret
 
 
 
+# macro for rest (from 33)
 .altmacro
 
 .macro isr_other num

@@ -14,6 +14,12 @@
 #define IA32_APIC_BASE_MSR_ENABLE 0x800
 
 
+// APIC timer related
+#define APIC_REGISTER_TIMER_DIV 0x3E0
+#define APIC_REGISTER_LVT_TIMER 320
+#define APIC_LVT_TIMER_MODE_PERIODIC 20000
+#define APIC_REGISTER_TIMER_INITCNT 0x380
+
 // IOAPIC related
 #define IOAPICID          0x00
 #define IOAPICVER         0x01
@@ -66,7 +72,6 @@ void init_apic() {
   }
   */
 
-
   if (msr_available) enable_apic();
   // else enable APIC on some other way? Or it might always be enabled?
 
@@ -75,26 +80,39 @@ void init_apic() {
   write_register(0xF0, read_register(0xF0) | 0x100);
 
 
-  printf("Apic enabled\n");
+  proc_local_apic* lapic1 = (proc_local_apic*) local_apic1_virt_addr;
+  printf("Apic ID %d enabled\n",  lapic1->APIC_id);
 
+
+  // Set lapic's interrupt command register's (ICR) to map lapic timerto an interrupt vector
+  // lapic timer -> interrupt vector 32
+  // TODO: set the fields to desired values (e.g. lapic id, etc)
+  write_register(0x300, 32);
+  // getting an interrupt called instantly here?
 
 
   // SET APIC TIMER
   // set task priority register (tpr)
   // for now use 4-level priority system
   // start with TPR at 3 (lowest priority)
-  write_register(0x80, 3);
+  write_register(0x80, 16);
+
 
   // TODO:
   // set local apic timer's divide configuration register
-  // configure local apic timer's interrupt vector and umask the timer's IRQ
+  // configure local apic timer's interrupt vector and unmask the timer's IRQ
   // set local apic timer's initial count
-
+  apic_start_timer();
+  // doesn't seem to be working (qemu "info lapic" shows current count set to 0 always)
   
 
   // TODO: set io apic and keyboard interrupts
   // find io apic registers
   MADT_record_header* io_apic1_head = (MADT_record_header*) find_MADT_entry_by_type(1);
+
+
+  // TODO: make sure that this is the IOAPIC used for "legacy/ISA IRQ 1"
+  // using input source overdrive entries
 
   if (io_apic1_head == 0) {
     printf("No io apic available\n");
@@ -107,7 +125,19 @@ void init_apic() {
   printf("io apic addr: %x\n", io_apic1->io_apic_address);
 
 
+  /*
   // check/change IRQ indexes of ioapic
+  // map IOAPIC interrupts to interrupt vectors [32 ~ 47]
+  // test: set all IRQs to incrementing interrupt vectors starting from 32
+  for (uint32_t i = 0; i < 16; i++) {
+    uint32_t reg_val = read_ioapic_register((uintptr_t) io_apic1, 0x10 + (i * 2));
+    reg_val &= 0xFFFF0000; // Clear the lower 16 bits
+    reg_val |= (32 + i);   // Set the interrupt vector to 32 + i
+    printf("%x\n", reg_val);
+    write_ioapic_register((uintptr_t) io_apic1, 0x10 + (i * 2), reg_val);
+  }
+  */
+
 }
 
 uintptr_t find_MADT_entry_by_type(uint32_t type) {
@@ -175,6 +205,11 @@ void enable_apic() {
 }
 
 
+void apic_send_eoi() {
+  write_register(0xB0, 0);
+}
+
+
 
 uint32_t read_register(uintptr_t register_offset) {
   return *((uint32_t*) (local_apic1_virt_addr + register_offset));
@@ -185,19 +220,30 @@ void write_register(uintptr_t register_offset, uint32_t value) {
 }
 
 
+void apic_start_timer() {
+  // Estimate APIC timer frequency of 10Mhz -> 100.000 ticks per 10ms
+  // TODO: find a better way to get frequency
+  uint32_t ticksIn10ms = 100000;
+
+  // Start timer as periodic on IRQ 0, divider 16, with the number of ticks we counted
+  write_register(APIC_REGISTER_LVT_TIMER, 32 | APIC_LVT_TIMER_MODE_PERIODIC);
+  write_register(APIC_REGISTER_TIMER_DIV, 0x3);
+  write_register(APIC_REGISTER_TIMER_INITCNT, ticksIn10ms);
+}
+
 
 // IOAPIC
 // 'apic_base' is the memory base address for a selected IOAPIC
 void write_ioapic_register(const uintptr_t apic_base, const uint8_t offset, const uint32_t val) {
-    /* tell IOREGSEL where we want to write to */
-    *(volatile uint32_t*)(apic_base) = offset;
-    /* write the value to IOWIN */
-    *(volatile uint32_t*)(apic_base + 0x10) = val; 
+  /* tell IOREGSEL where we want to write to */
+  *(volatile uint32_t*)(apic_base) = offset;
+  /* write the value to IOWIN */
+  *(volatile uint32_t*)(apic_base + 0x10) = val; 
 }
- 
+
 uint32_t read_ioapic_register(const uintptr_t apic_base, const uint8_t offset) {
-    /* tell IOREGSEL where we want to read from */
-    *(volatile uint32_t*)(apic_base) = offset;
-    /* return the data from IOWIN */
-    return *(volatile uint32_t*)(apic_base + 0x10);
+  /* tell IOREGSEL where we want to read from */
+  *(volatile uint32_t*)(apic_base) = offset;
+  /* return the data from IOWIN */
+  return *(volatile uint32_t*)(apic_base + 0x10);
 }

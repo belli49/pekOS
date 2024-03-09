@@ -3,6 +3,7 @@
 
 #include <kernel/exception_handler.h>
 #include <kernel/paging.h>
+#include <kernel/apic.h>
 
 
 void exception_handler() {
@@ -14,8 +15,9 @@ void exception_handler() {
 
 
 void test_exception_handler() {
-  printf("Test exception handler called\n");
-  __asm__ volatile ("cli; hlt"); // Completely hangs the computer
+  printf("APIC timer test exception handler called\n");
+  apic_send_eoi();
+  return;
 }
 
 

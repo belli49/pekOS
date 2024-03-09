@@ -35,7 +35,7 @@
 
 
 void init_pic() {
-  PIC_remap(32, 40);
+  PIC_remap(240, 248);
   mask_pic_interrupts();
 }
 
