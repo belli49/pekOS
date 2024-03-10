@@ -16,8 +16,8 @@
 
 // APIC timer related
 #define APIC_REGISTER_TIMER_DIV 0x3E0
-#define APIC_REGISTER_LVT_TIMER 320
-#define APIC_LVT_TIMER_MODE_PERIODIC 20000
+#define APIC_REGISTER_LVT_TIMER 0x320
+#define APIC_LVT_TIMER_MODE_PERIODIC 0x20000
 #define APIC_REGISTER_TIMER_INITCNT 0x380
 
 // IOAPIC related
@@ -87,15 +87,14 @@ void init_apic() {
   // Set lapic's interrupt command register's (ICR) to map lapic timerto an interrupt vector
   // lapic timer -> interrupt vector 32
   // TODO: set the fields to desired values (e.g. lapic id, etc)
-  write_register(0x300, 32);
-  // getting an interrupt called instantly here?
+  // write_register(0x300, 32);
 
 
   // SET APIC TIMER
   // set task priority register (tpr)
   // for now use 4-level priority system
   // start with TPR at 3 (lowest priority)
-  write_register(0x80, 16);
+  write_register(0x80, 3);
 
 
   // TODO:
@@ -103,7 +102,6 @@ void init_apic() {
   // configure local apic timer's interrupt vector and unmask the timer's IRQ
   // set local apic timer's initial count
   apic_start_timer();
-  // doesn't seem to be working (qemu "info lapic" shows current count set to 0 always)
   
 
   // TODO: set io apic and keyboard interrupts

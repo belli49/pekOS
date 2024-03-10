@@ -70,6 +70,7 @@ isr_no_err_stub 31
 isr_stub_32:
   pushal
 
+  cld
   call test_exception_handler
 
   popal

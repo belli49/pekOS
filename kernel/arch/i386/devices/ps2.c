@@ -152,7 +152,7 @@ void init_ps2() {
 
 
     // test device 1 by polling
-    // print_keyboard_scan_codes();
+    print_keyboard_scan_codes();
 
   } else {
     // no PS/2 controller
