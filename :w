@@ -114,21 +114,20 @@ void init_apic() {
     return;
   }
 
-
-  io_apic_interrupt_source_overdrive* ioapic_iso = (io_apic_interrupt_source_overdrive*) find_MADT_entry_by_type(2);
-
   // found first io apic (virt) address
   // TODO: parse other io apics
-  // TODO: fix ioapic struct. io_apic_address should be 0xFEC00000
-  // problem is here it becomes 0x0000FEC0 if we do "io_apic* io_apic1 = (io_apic*) (io_apic1_head + 1);"
-  // for some reason, not adding the 1 worked though
-  io_apic* io_apic1 = (io_apic*) io_apic1_head;
-  
+  io_apic* io_apic1 = (io_apic*) (io_apic1_head);
+  // printf("%d, %d, ", io_apic1_head->entry_type, io_apic1_head->record_length);
+  // printf("%d, %x, %x, %x\n", io_apic1->io_apic_id, io_apic1->reserved_0, io_apic1->io_apic_address, io_apic1->global_system_interrupt_base);
+
 
   // map ioapic address
   uintptr_t ioapic_phys_address = io_apic1->io_apic_address;
   uintptr_t ioapic_virt_address = (((uintptr_t) find_free_virtaddr()) & 0xFFFFF000) | (ioapic_phys_address & 0xFFF);
   map_page((uintptr_t*) (ioapic_phys_address & 0xFFFFF000), (uintptr_t*) (ioapic_virt_address & 0xFFFFF000), 3);
+
+
+  printf("%x\n", ioapic_phys_address);
 
 
   // check/change IRQ indexes of ioapic
@@ -146,9 +145,10 @@ void init_apic() {
 
 
   printf("%x\n", read_ioapic_register((uintptr_t) ioapic_virt_address, 0x0));
-  printf("%x\n", read_ioapic_register((uintptr_t) ioapic_virt_address, 0x1));
+  printf("%x\n", read_ioapic_register((uintptr_t) ioapic_virt_address, 0x0));
   printf("%x\n", read_ioapic_register((uintptr_t) ioapic_virt_address, 0x10));
   printf("%x\n", read_ioapic_register((uintptr_t) ioapic_virt_address, 0x12));
+
 }
 
 

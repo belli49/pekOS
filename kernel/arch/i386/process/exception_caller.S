@@ -78,7 +78,20 @@ isr_stub_32:
 
 
 
-# macro for rest (from 33)
+
+# apic timer interrupt (33)
+isr_stub_33:
+  pushal
+
+  cld
+  call test_kbd_interrupt
+
+  popal
+  iret
+
+
+
+# macro for rest (from 34)
 .altmacro
 
 .macro isr_other num
@@ -88,7 +101,7 @@ isr_stub_\num:
 .endm
 
 .macro loop_insert_other_irqs
-  i = 33
+  i = 34
   .rept 223
     isr_other %i
     i = i + 1

@@ -39,6 +39,7 @@ void kernel_main(multiboot_info_t* mbd, uint32_t magic) {
   init_ps2();
 
   printf("Hello, welcome to pekOS!\n");
+  while (1);
 
   // tests();
 }

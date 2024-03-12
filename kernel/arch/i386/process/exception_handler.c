@@ -15,7 +15,15 @@ void exception_handler() {
 
 
 void test_exception_handler() {
-  printf("APIC timer test exception handler called\n");
+  //printf("APIC timer test exception handler called\n");
+  apic_send_eoi();
+  return;
+}
+
+
+
+void test_kbd_interrupt() {
+  printf("kbd test exception handler called\n");
   apic_send_eoi();
   return;
 }

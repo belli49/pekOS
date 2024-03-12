@@ -106,7 +106,7 @@ void init_ps2() {
     send_ps2_command(0x20);
     controller_config = read_ps2_data() | 3;
     send_ps2_command(0x60);
-    send_device_data(controller_config);
+    outb(PS2_DATA_PORT, controller_config);
 
 
 
@@ -152,8 +152,7 @@ void init_ps2() {
 
 
     // test device 1 by polling
-    print_keyboard_scan_codes();
-
+    // print_keyboard_scan_codes();
   } else {
     // no PS/2 controller
 
