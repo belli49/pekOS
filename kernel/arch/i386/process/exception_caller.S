@@ -65,44 +65,117 @@ isr_no_err_stub 31
 
 
 # other IRQs (>= 32)
-
-# apic timer interrupt (32)
+# pic IRQ0 (32) # PIT?
 isr_stub_32:
   pushal
+  pushl $32
 
   cld
-  call test_exception_handler
+  call exception_handler_code
 
+  popl %eax
   popal
   iret
 
-
-
-
-# apic timer interrupt (33)
+# pic IRQ 0 (33)
 isr_stub_33:
   pushal
+  pushl $33
 
   cld
   call test_kbd_interrupt
 
+  popl %eax
   popal
   iret
 
 
 
-# macro for rest (from 34)
+# macro for PIC (from 34)
 .altmacro
 
 .macro isr_other num
 isr_stub_\num:
-  call exception_handler
+  pushal
+  pushl $\num
+
+  cld
+  call exception_handler_code
+
+  popl %eax
+  popal
   iret
 .endm
 
-.macro loop_insert_other_irqs
+.macro loop_insert_PIC_irqs
   i = 34
-  .rept 223
+  .rept 14
+    isr_other %i
+    i = i + 1
+  .endr
+.endm
+
+loop_insert_PIC_irqs
+
+
+
+
+# apic timer interrupt (48)
+isr_stub_48:
+  pushal
+
+  cld
+  call system_timer_interrupt
+
+  popal
+  iret
+
+
+
+
+# interrupt (49)
+isr_stub_49:
+  pushal
+  pushl $49
+
+  cld
+  call exception_handler_code
+
+  popl %eax
+  popal
+  iret
+
+
+# interrupt (50)
+isr_stub_50:
+  pushal
+  pushl $50
+
+  cld
+  call test_kbd_interrupt
+
+  popl %eax
+  popal
+  iret
+
+
+# rest of apic (from 51)
+.macro loop_insert_apic_irqs
+  i = 51
+  .rept 14
+    isr_other %i
+    i = i + 1
+  .endr
+.endm
+
+loop_insert_apic_irqs
+
+
+
+# macro for rest (from 64)
+.macro loop_insert_other_irqs
+  i = 65
+  .rept 191
     isr_other %i
     i = i + 1
   .endr

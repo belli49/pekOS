@@ -84,10 +84,10 @@ void init_apic() {
   printf("Apic ID %d enabled\n",  lapic1->APIC_id);
 
 
-  // Set lapic's interrupt command register's (ICR) to map lapic timerto an interrupt vector
-  // lapic timer -> interrupt vector 32
+  // Set lapic's interrupt command register's (ICR) to map lapic timer to an interrupt vector
+  // lapic timer -> interrupt vector 48
   // TODO: set the fields to desired values (e.g. lapic id, etc)
-  // write_register(0x300, 32);
+  // write_register(0x300, 48);
 
 
   // SET APIC TIMER
@@ -117,6 +117,13 @@ void init_apic() {
 
   io_apic_interrupt_source_overdrive* ioapic_iso = (io_apic_interrupt_source_overdrive*) find_MADT_entry_by_type(2);
 
+  printf("ioapic source overdrive: ");
+  printf("%d, %d, %d, %d\n",
+      ioapic_iso->bus_source,
+      ioapic_iso->irq_source,
+      ioapic_iso->global_system_interrupt,
+      ioapic_iso->flags);
+
   // found first io apic (virt) address
   // TODO: parse other io apics
   // TODO: fix ioapic struct. io_apic_address should be 0xFEC00000
@@ -132,12 +139,12 @@ void init_apic() {
 
 
   // check/change IRQ indexes of ioapic
-  // map IOAPIC interrupts to interrupt vectors [32 ~ 47]
-  // test: set all IRQs to incrementing interrupt vectors starting from 32
+  // map IOAPIC interrupts to interrupt vectors [49 ~ 64]
   for (uint32_t i = 0; i < 16; i++) {
     uint32_t reg_val = read_ioapic_register((uintptr_t) ioapic_virt_address, 0x10 + (i * 2));
     reg_val &= 0xFFFF0000; // Clear the lower 16 bits
-    reg_val |= (32 + i + 1);   // Set the interrupt vector to 32 + i
+    reg_val |= (48 + i + 1);   // Set the interrupt vector to 48 + i + 1
+    if (i != 2) reg_val &= ~(1 << 16);     // unmask vector
     write_ioapic_register((uintptr_t) ioapic_virt_address, 0x10 + (i * 2), reg_val);
 
     uint32_t upper_reg = read_ioapic_register((uintptr_t) ioapic_virt_address, 0x11 + (i * 2)) & 0x00FFFFFF;
@@ -238,7 +245,7 @@ void apic_start_timer() {
   uint32_t ticksIn10ms = 100000;
 
   // Start timer as periodic on IRQ 0, divider 16, with the number of ticks we counted
-  write_register(APIC_REGISTER_LVT_TIMER, 32 | APIC_LVT_TIMER_MODE_PERIODIC);
+  write_register(APIC_REGISTER_LVT_TIMER, 48 | APIC_LVT_TIMER_MODE_PERIODIC);
   write_register(APIC_REGISTER_TIMER_DIV, 0x3);
   write_register(APIC_REGISTER_TIMER_INITCNT, ticksIn10ms);
 }

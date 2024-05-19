@@ -35,7 +35,8 @@
 
 
 void init_pic() {
-  PIC_remap(240, 248);
+  PIC_remap(32, 40);
+  // unmask_pic_interrupts();
   mask_pic_interrupts();
 }
 
@@ -44,6 +45,13 @@ void mask_pic_interrupts() {
   // mask all interrupts
   outb(PIC1_DATA, 0xFF);  // Mask all interrupts on master PIC
   outb(PIC2_DATA, 0xFF);  // Mask all interrupts on slave PIC
+}
+
+
+void unmask_pic_interrupts() {
+  // unmask all interrupts
+  outb(PIC1_DATA, 0x00);  // Unmask all interrupts on master PIC
+  outb(PIC2_DATA, 0x00);  // Unmask all interrupts on slave PIC
 }
 
 

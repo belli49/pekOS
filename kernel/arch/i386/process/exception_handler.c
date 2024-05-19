@@ -4,6 +4,8 @@
 #include <kernel/exception_handler.h>
 #include <kernel/paging.h>
 #include <kernel/apic.h>
+#include <kernel/pic.h>
+#include <kernel/ps2.h>
 
 
 void exception_handler() {
@@ -12,18 +14,49 @@ void exception_handler() {
 }
 
 
+void exception_handler_code(uint32_t code) {
+  printf("It was an exception :( %d\n", code);
+
+  if (code >= 32 && code < 48) PIC_sendEOI(code - 32);
+  else if (code >= 48 && code < 64) apic_send_eoi();
+  return;
+}
+
 
 
 void test_exception_handler() {
-  //printf("APIC timer test exception handler called\n");
+  //printf("Test exception handler called\n");
   apic_send_eoi();
   return;
 }
 
 
 
-void test_kbd_interrupt() {
-  printf("kbd test exception handler called\n");
+void test_kbd_interrupt(uint32_t code) {
+  uint8_t scan_code;
+
+  switch (code) {
+    case 33:
+      // PIC interrupt (IRQ1)
+      scan_code = read_ps2_data();
+      printf("scancode read from PIC interrupt %x\n", scan_code);
+      PIC_sendEOI(code - 32);
+      break;
+
+    case 50:  
+      // IOAPIC interrupt (redirected to ioapic IRQ1 in qemu)
+      scan_code = read_ps2_data();
+      printf("scancode read from IOAPIC interrupt %x\n", scan_code);
+      apic_send_eoi();
+      break;
+
+    default:
+      // if this case is called, interrupt stub table is wrong (calling wrong routine)
+      printf("kbd interrupt called from invalid IRQ error\n");
+      __asm__ volatile ("cli; hlt"); // Completely hangs the computer
+      break;
+  }
+
   apic_send_eoi();
   return;
 }
@@ -31,7 +64,9 @@ void test_kbd_interrupt() {
 
 
 void system_timer_interrupt() {
-  printf("System timer interrupt called\n");
+  // printf("System timer interrupt called\n");
+  apic_send_eoi();
+  return;
   __asm__ volatile ("cli; hlt"); // Completely hangs the computer
 }
 

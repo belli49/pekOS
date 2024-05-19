@@ -3,6 +3,7 @@
 
 void init_pic(void);
 void mask_pic_interrupts(void);
+void unmask_pic_interrupts(void);
 void PIC_remap(int offset1, int offset2);
 void PIC_sendEOI(unsigned char irq);
 void IRQ_set_mask(unsigned char IRQline);

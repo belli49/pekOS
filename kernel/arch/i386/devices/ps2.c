@@ -102,14 +102,6 @@ void init_ps2() {
 
 
 
-    // enable interrupts
-    send_ps2_command(0x20);
-    controller_config = read_ps2_data() | 3;
-    send_ps2_command(0x60);
-    outb(PS2_DATA_PORT, controller_config);
-
-
-
 
     // reset devices
     // first port
@@ -149,6 +141,13 @@ void init_ps2() {
     send_device_data(0xF4);
     command_res = read_ps2_data();
     if (command_res != 0xFA) printf("Scanning enabling failed\n");
+
+
+    // enable interrupts
+    send_ps2_command(0x20);
+    controller_config = read_ps2_data() | 3;
+    send_ps2_command(0x60);
+    outb(PS2_DATA_PORT, controller_config);
 
 
     // test device 1 by polling
