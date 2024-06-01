@@ -8,13 +8,17 @@ export AR=${HOST}-ar
 export AS=${HOST}-as
 export CC=${HOST}-gcc
 
+#export AR="x86_64-linux-gnu-ar"
+#export AS="x86_64-linux-gnu-as -m32"
+#export CC="x86_64-linux-gnu-gcc -m32"
+
 export PREFIX=/usr
 export EXEC_PREFIX=$PREFIX
 export BOOTDIR=/boot
 export LIBDIR=$EXEC_PREFIX/lib
 export INCLUDEDIR=$PREFIX/include
 
-export CFLAGS='-O2 -g'
+export CFLAGS='-O2 -g -Wl,-melf_i386'
 export CPPFLAGS=''
 
 # Configure the cross-compiler to use the desired system root.
