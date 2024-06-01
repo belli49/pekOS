@@ -12,4 +12,5 @@ menuentry "pekos" {
 	multiboot /boot/pekos.kernel
 }
 EOF
-lima grub-mkrescue -o pekos.iso isodir
+
+grub-mkrescue -o pekos.iso isodir

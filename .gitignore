@@ -5,3 +5,4 @@ sysroot
 compile_commands.json
 scp_qemu.sh
 make_and_send_zip.sh
+pekos.zip

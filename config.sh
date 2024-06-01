@@ -8,6 +8,7 @@ export AR=${HOST}-ar
 export AS=${HOST}-as
 export CC=${HOST}-gcc
 
+# macos compiler
 #export AR="x86_64-linux-gnu-ar"
 #export AS="x86_64-linux-gnu-as -m32"
 #export CC="x86_64-linux-gnu-gcc -m32"
